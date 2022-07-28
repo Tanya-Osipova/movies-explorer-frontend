@@ -1,24 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../Navigation/Navigation';
 import './Header.css';
 
 function Header() {
-  const [header, setHeader] = useState(false);
+  const [fixedHeader, setFixedHeader] = useState(false);
 
-  const changeBackground = () => {
-    if (window.scrollY >= 80) {
-      setHeader(true)
-    } else {
-      setHeader(false)
-    }
-  }
-
-  window.addEventListener('scroll', changeBackground)
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY >= 100) {
+        setFixedHeader(true);
+      } else {
+        setFixedHeader(false);
+      }
+    });
+  }, []);
 
   return (
-    <div className={header ? 'header header_active' : 'header'}>
+    <header className={fixedHeader ? 'header header_active' : 'header'}>
       <Navigation />
-    </div>
+    </header>
   );
 }
 

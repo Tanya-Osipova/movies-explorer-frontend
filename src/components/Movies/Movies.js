@@ -9,13 +9,13 @@ import './Movies.css';
 
 function Movies() {
   return (
-    <section className="movies">
+    <>
       <NavigationAuth />
       <SearchForm />
       <MoviesCardList />
       <MoreButton>More</MoreButton>
       <Footer />
-    </section>
+    </>
   );
 }
 

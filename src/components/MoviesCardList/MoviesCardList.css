@@ -31,7 +31,7 @@
   .movies-card-list {
     grid-template-columns: 300px;
   }
-}
+} 
 
 
 @media screen and (max-width: 400px) {

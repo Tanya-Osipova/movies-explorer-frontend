@@ -79,6 +79,7 @@
   height: 44px;
   display: none;
   position: relative;
+  right: 0;
   z-index: 999;
   color: #000;
   cursor: pointer;

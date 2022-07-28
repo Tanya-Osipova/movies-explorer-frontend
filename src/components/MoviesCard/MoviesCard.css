@@ -84,9 +84,11 @@
 
 @media screen and (max-width: 750px) {
   .movies-card {
-    width: 300px;
+    width: calc(100% - 2 * 10px);
     height: 236px;
+    margin: auto;
     margin-bottom: 16px;
+
   }
 
   .movies-card__title {
@@ -96,7 +98,7 @@
 
 @media screen and (min-width: 400px) {
   .movies-card:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 8px -5px;
-    }
+    transform: scale(1.1);
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  }
 }

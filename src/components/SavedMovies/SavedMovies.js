@@ -6,12 +6,12 @@ import SearchForm from '../SearchForm/SearchForm';
 
 function SavedMovies() {
   return (
-    <div>
+    <>
       <NavigationAuth />
       <SearchForm />
       <MoviesCardList />
       <Footer />
-    </div>
+    </>
   );
 }
 

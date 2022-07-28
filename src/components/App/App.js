@@ -4,12 +4,14 @@ import Main from '../Main/Main';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
-import '../../vendor/fonts/fonts.css';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import './App.css';
 import Popup from '../Popup/Popup';
+import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton';
+import '../../vendor/fonts/fonts.css';
+import './App.css';
+
 
 function App() {
   /*
@@ -20,7 +22,7 @@ function App() {
     return () => {
       document.removeEventListener("keydown", handleEscapeKey);
     };
-  }, []);
+  }, [popupActive]);
 
   function handleEscapeKey(e) {
     if(e.key === 'Escape') {
@@ -31,7 +33,7 @@ function App() {
   return (
     <div className='app'>
       <Switch>
-        <Route exact path='/'>
+        {/* <Route exact path='/'>
           <Main />
         </Route>  
         <Route path='/signin'>
@@ -39,8 +41,8 @@ function App() {
         </Route>
         <Route path='/signup'>
           <Register />
-        </Route> 
-        {/* <Route exact path='/movies'>
+        </Route>   */}
+        <Route exact path='/'>
           <Movies />
         </Route>
          <Route path='/saved-movies'>
@@ -48,11 +50,15 @@ function App() {
         </Route>
         <Route path='/profile'>
           <Profile />
-        </Route>
-        <Route path='*'>
+        </Route> 
+        {/* <Route path='*'>
           <PageNotFound />
-        </Route> */}
+        </Route>   */}
       </Switch>
+      {/* <ScrollToTopButton /> */}
+      {/* <Popup active={popupActive} setActive={setPopupActive}></Popup>
+      <button onClick={() => setPopupActive(true)}>click</button>  */}
+      
     </div>
   );
 }

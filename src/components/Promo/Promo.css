@@ -11,9 +11,12 @@
   transition: .5s linear;
 }
 
-.promo:hover {
+.promo.promo_active {
   background: rgba(0, 0, 0, 0.9) url('../../images/logos/praktikumlogo.svg') no-repeat center;
   background-size: content;
+} 
+.promo.promo_active .promo__title {
+  color: #E8E8E8;
 }
 
 .promo__title {
@@ -29,10 +32,6 @@
   letter-spacing: -0.04em;
   color: #000;
   transition: .3s linear;
-}
-
-.promo:hover .promo__title {
-  color: #E8E8E8;
 }
 
 @media screen and (max-width: 800px) {

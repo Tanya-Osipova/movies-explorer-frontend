@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 import './NavigationAuth.css';
 
 function NavigationAuth() {
   const [sidebarActive, setSidebarActive] = useState(false);
+
+  // lock body when sidebar is open
+  useEffect(() => {
+    if (sidebarActive) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [sidebarActive]);
   
   return (
     <nav className="navigation-auth">
-      <div className={sidebarActive ? "navigation-auth__overlay navigation-auth__overlay_active" : "navigation-auth__overlay"}></div>
+      <div 
+        className={sidebarActive ? "navigation-auth__overlay navigation-auth__overlay_active" : "navigation-auth__overlay"}
+        onClick={() => setSidebarActive(!sidebarActive)}
+      >
+      </div>
       <div className="navigation-auth__content">
         <Logo />
         <button 

@@ -7,9 +7,9 @@ function Techs() {
     <section className="techs" id="techs">
       <div className="techs__content">
          <Title title="Technologies" />
-        <p className="techs__title">
+        <h3 className="techs__title">
           7 Technologies
-        </p>
+        </h3>
         <p className="techs__text">
           On the web development course, we mastered the technologies that
           we used in this project.
