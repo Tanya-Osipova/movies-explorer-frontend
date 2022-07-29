@@ -9,7 +9,7 @@
   transform: scale(1.1);
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 500px) {
   .logo {
     display: block;
     margin: 0 auto;

@@ -32,8 +32,9 @@ function App() {
   */
   return (
     <div className='app'>
+      
       <Switch>
-        <Route exact path='/'>
+        {/* <Route exact path='/'>
           <Main />
         </Route>  
         <Route path='/signin'>
@@ -41,8 +42,8 @@ function App() {
         </Route>
         <Route path='/signup'>
           <Register />
-        </Route>   
-        {/* <Route exact path='/'>
+        </Route>  */}
+        <Route exact path='/'>
           <Movies />
         </Route>
          <Route path='/saved-movies'>
@@ -50,11 +51,11 @@ function App() {
         </Route>
         <Route path='/profile'>
           <Profile />
-        </Route>   */}
-        <Route path='*'>
+        </Route>  
+        {/* <Route path='*'>
           <PageNotFound />
-        </Route>   
-      </Switch>
+        </Route>   */}
+      </Switch> 
       {/* <ScrollToTopButton /> 
       
       <Popup active={popupActive} setActive={setPopupActive}></Popup>

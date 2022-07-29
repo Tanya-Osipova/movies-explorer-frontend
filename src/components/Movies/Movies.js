@@ -6,7 +6,6 @@ import Footer from '../Footer/Footer';
 import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import './Movies.css';
 
-
 function Movies() {
   return (
     <>

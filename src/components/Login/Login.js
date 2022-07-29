@@ -1,49 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import FormContainer from '../FormContainer/FormContainer';
+import InputField from '../InputField/InputField';
+import Button from '../Button/Button';
 import Logo from '../Logo/Logo';
-import SubmitButton from '../SubmitButton/SubmitButton';
 import './Login.css';
 
-function Login() {
+const Login = () => {
+  const onSubmit = (email, password) => console.log(email, password);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
-    <div className="form">
+    <div className='login'>
       <Logo />
-      <p className="form__title">
-        Nice to see you!
-      </p>
-      <form className="form__container">
-        {/* Email */}
-        <label className="form__label" htmlFor="email">
+      <FormContainer
+        title='Nice to see you!'
+        question='Not a member yet?'
+        link='signup'
+        linkName='Sign up'
+        onSubmit={event => {
+          onSubmit(email, password);
+          event.preventDefault();
+        }}
+      >
+        {/* EMAIL */}
+        <InputField
+          type='email'
+          id='email'
+          name='email'
+          value={email} 
+          onChange={setEmail}
+        >
           Email
-        </label>
-        <input 
-          className="form__input"
-          type="email" 
-          id="email" 
-          name="email" 
-        />
-        {/* Password */}
-        <label className="form__label" htmlFor="password">
+        </InputField>
+        {/* PASSWORD */}
+        <InputField 
+          type='password'
+          id='password'
+          name='password'
+          value={password} 
+          onChange={setPassword}
+        >
           Password
-        </label>
-        <input 
-          className="form__input"
-          type="password" 
-          id="password" 
-          name="password" 
-        />
-        <SubmitButton>Login</SubmitButton>
-      </form>
-      <div className="form__link-container">
-        <p className="form__question">
-          Not a member yet?
-        </p>
-        <Link className="form__link" to="signup">
-          Sign up
-        </Link>
-      </div>
+        </InputField>
+        {/* BUTTON */}
+        <Button type="submit">
+          Login
+        </Button>
+      </FormContainer>
     </div>
   );
-}
+};
 
 export default Login;

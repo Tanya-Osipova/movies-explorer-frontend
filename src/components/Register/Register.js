@@ -1,60 +1,68 @@
-import React  from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import FormContainer from '../FormContainer/FormContainer';
+import InputField from '../InputField/InputField';
+import Button from '../Button/Button';
 import Logo from '../Logo/Logo';
-import SubmitButton from '../SubmitButton/SubmitButton';
 import './Register.css';
 
-function Register() {
+const Register = () => {
+  const onSubmit = (username, email, password) => console.log(username, email, password);
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
-    <div className="form">
+    <div className='register'>
       <Logo />
-      <p className="form__title">
-        Welcome!
-      </p>
-      <form className="form__container">
-        {/* Name */}
-        <label className="form__label" htmlFor="username">
+      <FormContainer
+        title='Welcome!'
+        question='Already have an account?'
+        link='signin'
+        linkName='Login'
+        onSubmit={event => {
+          onSubmit(username, email, password);
+          event.preventDefault();
+        }}
+      >
+        {/* USERNAME */}
+        <InputField 
+          type='text'
+          id='username'
+          name='username'
+          value={username} 
+          onChange={setUsername}
+        >
           Username
-        </label>
-        <input 
-          className="form__input"
-          type="text" 
-          id="username" 
-          name="username" 
-        />
-        {/* Email */}
-        <label className="form__label" htmlFor="email">
+        </InputField>
+        {/* EMAIL */}
+        <InputField
+          type='email'
+          id='email'
+          name='email'
+          value={email} 
+          onChange={setEmail}
+        >
           Email
-        </label>
-        <input 
-          className="form__input"
-          type="email" 
-          id="email" 
-          name="email" 
-        />
-        {/* Password */}
-        <label className="form__label" htmlFor="password">
+        </InputField>
+        {/* PASSWORD */}
+        <InputField 
+          type='password'
+          id='password'
+          name='password'
+          value={password} 
+          onChange={setPassword}
+        >
           Password
-        </label>
-        <input 
-          className="form__input form__input_error"
-          type="password" 
-          id="password" 
-          name="password" 
-        />
-        <span className="form__error-message">Something went wrong</span>
-        <SubmitButton>Sign up</SubmitButton>
-      </form>
-      <div className="form__link-container">
-        <p className="form__question">
-          Already have an account?
-        </p>
-        <Link className="form__link" to="signin">
-          Login
-        </Link>
-      </div>
+        </InputField>
+        <p className='form__error'>error message</p>
+        {/* BUTTON */}
+        <Button type="submit">
+          Sign up
+        </Button>
+      </FormContainer>
     </div>
   );
-}
+};
 
 export default Register;
