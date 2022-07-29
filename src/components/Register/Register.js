@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 import SubmitButton from '../SubmitButton/SubmitButton';
@@ -54,7 +54,6 @@ function Register() {
         </Link>
       </div>
     </div>
-    
   );
 }
 

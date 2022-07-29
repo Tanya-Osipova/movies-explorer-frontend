@@ -23,7 +23,9 @@
   margin: 0 0 151px;
   max-width: 730px;
   width: 100%;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 50px;

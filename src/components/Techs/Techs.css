@@ -13,7 +13,9 @@
   max-width: 600px;
   width: 100%;
   color: #000;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 50px;
@@ -27,7 +29,9 @@
   max-width: 460px;
   width: 100%;
   color: #000;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -50,7 +54,9 @@
   color: #000;
   background: #E8E8E8;
   border-radius: 10px;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;

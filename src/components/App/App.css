@@ -13,7 +13,9 @@
   max-width: 396px;
   width: 100%;
   margin: 40px 0;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 24px;
@@ -22,7 +24,9 @@
 }
 
 .form__label {
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
@@ -38,7 +42,9 @@
   margin-bottom: 24px;
   padding-bottom: 10px;
   outline: none;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -64,7 +70,9 @@
 
 .form__question {
   margin: 0;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -76,7 +84,9 @@
   text-decoration: none;
   color: #2BE080;
   margin-left: 6px;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -110,7 +120,9 @@
 
 .form__error-message {
   width: 100%;
-  font-family: 'Inter';
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
