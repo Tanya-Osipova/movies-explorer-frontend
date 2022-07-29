@@ -1,5 +1,4 @@
 import React from 'react';
-import './Form.css';
 
 const Form = ({ onSubmit, children }) => (
   <form onSubmit={onSubmit}>

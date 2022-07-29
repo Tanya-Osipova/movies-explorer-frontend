@@ -18,18 +18,30 @@ function NavigationAuth() {
   return (
     <nav className="navigation-auth">
       <div 
-        className={sidebarActive ? "navigation-auth__overlay navigation-auth__overlay_active" : "navigation-auth__overlay"}
+        className={sidebarActive ? 
+          "navigation-auth__overlay navigation-auth__overlay_active" 
+          : 
+          "navigation-auth__overlay"
+        }
         onClick={() => setSidebarActive(!sidebarActive)}
       >
       </div>
       <div className="navigation-auth__content">
         <Logo />
         <button 
-          className={sidebarActive ? "navigation-auth__hamburger navigation-auth__hamburger_active" : "navigation-auth__hamburger"}
+          className={sidebarActive ? 
+            "navigation-auth__hamburger navigation-auth__hamburger_active" 
+            : 
+            "navigation-auth__hamburger"
+          }
           onClick={() => setSidebarActive(!sidebarActive)}
         >
         </button>
-        <ul className={sidebarActive ? 'navigation-auth__list navigation-auth__list_active' : 'navigation-auth__list' }>
+        <ul className={sidebarActive ? 
+          'navigation-auth__list navigation-auth__list_active' 
+          : 
+          'navigation-auth__list' 
+        }>
           <li className="navigation-auth__item navigation-auth__item_homepage">
             <Link 
               to="/" 

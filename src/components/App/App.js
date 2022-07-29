@@ -9,8 +9,9 @@ import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Popup from '../Popup/Popup';
 import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton';
+import successIcon from '../../images/icons/success.svg';
+//import failedIcon from '../../images/icons/failed.svg';
 import '../../vendor/fonts/fonts.css';
-import './App.css';
 
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
   */
   return (
     <div className='app'>
-      
+      <Popup />
       <Switch>
         {/* <Route exact path='/'>
           <Main />
@@ -43,6 +44,7 @@ function App() {
         <Route path='/signup'>
           <Register />
         </Route>  */}
+
         <Route exact path='/'>
           <Movies />
         </Route>
@@ -51,16 +53,22 @@ function App() {
         </Route>
         <Route path='/profile'>
           <Profile />
-        </Route>  
+        </Route>
+
         {/* <Route path='*'>
           <PageNotFound />
         </Route>   */}
       </Switch> 
-      {/* <ScrollToTopButton /> 
-      
-      <Popup active={popupActive} setActive={setPopupActive}></Popup>
-      <button onClick={() => setPopupActive(true)}>click</button>  */}
-      
+      {/* <ScrollToTopButton /> */}
+      {/*       
+      <Popup 
+        active={popupActive} 
+        setActive={setPopupActive} 
+        message='You are successfully registered!'
+        icon={successIcon}
+      />
+      <button onClick={() => setPopupActive(true)}>click</button>  
+      */}
     </div>
   );
 }
