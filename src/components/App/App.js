@@ -9,10 +9,9 @@ import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Popup from '../Popup/Popup';
 import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton';
-import successIcon from '../../images/icons/success.svg';
+//import successIcon from '../../images/icons/success.svg';
 //import failedIcon from '../../images/icons/failed.svg';
 import '../../vendor/fonts/fonts.css';
-
 
 function App() {
   /*
@@ -35,7 +34,7 @@ function App() {
     <div className='app'>
       <Popup />
       <Switch>
-        {/* <Route exact path='/'>
+        <Route exact path='/'>
           <Main />
         </Route>  
         <Route path='/signin'>
@@ -43,9 +42,8 @@ function App() {
         </Route>
         <Route path='/signup'>
           <Register />
-        </Route>  */}
-
-        <Route exact path='/'>
+        </Route>  
+        <Route path='/movies'>
           <Movies />
         </Route>
          <Route path='/saved-movies'>
@@ -54,12 +52,11 @@ function App() {
         <Route path='/profile'>
           <Profile />
         </Route>
-
-        {/* <Route path='*'>
+        <Route path='*'>
           <PageNotFound />
-        </Route>   */}
+        </Route>
       </Switch> 
-      {/* <ScrollToTopButton /> */}
+      <ScrollToTopButton />
       {/*       
       <Popup 
         active={popupActive} 
