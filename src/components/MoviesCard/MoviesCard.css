@@ -1,0 +1,108 @@
+.movies-card {
+  width: 364px;
+  height: 271px;
+  background: #FDFDFD;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  -webkit-transition: .4s linear;
+  -moz-transition: .4s linear;
+  transition: .4s linear;
+}
+
+.movies-card__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.movies-card__title {
+  max-width: 280px;
+  width: 100%;
+  margin: 0;
+  color: #000;
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.movies-card__duration {
+  margin: 9px 0 0;
+  color: #A0A0A0;
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.movies-card__save-button {
+  background: url('../../images/icons/save.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px #ccc;
+  -webkit-transition: .3s linear;
+  -moz-transition: .3s linear;
+  transition: .3s linear;
+}
+
+.movies-card__save-button:hover,
+.movies-card__save-button:focus {
+  transform: scale(1.1);
+  box-shadow: 0px 0px 5px #000;
+}
+
+.movies-card__save-button_active {
+  background: url('../../images/icons/saved.svg');
+}
+
+.movies-card__image {
+  width: 100%;
+  height: 203px;
+  object-fit: cover;
+}
+ 
+@media screen and (max-width: 1100px) {
+  .movies-card {
+    width: 339px;
+    height: 258px;
+  }
+  
+  .movies-card__title {
+    max-width: 250px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .movies-card {
+    width: calc(100% - 2 * 10px);
+    height: 236px;
+    margin: auto;
+    margin-bottom: 16px;
+
+  }
+
+  .movies-card__title {
+    max-width: 210px;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .movies-card:hover {
+    transform: scale(1.1);
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  }
+}

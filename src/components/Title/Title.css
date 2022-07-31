@@ -1,0 +1,24 @@
+.title {
+  margin: 0 0 23px;
+  color: #000;
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+}
+
+.title__line {
+  border-top: 1px solid #000;
+}
+
+@media screen and (max-width: 320px) {
+  .title {
+    margin: 0 0 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

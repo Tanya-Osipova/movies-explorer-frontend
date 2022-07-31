@@ -1,0 +1,17 @@
+.logo {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  transition: .3s linear;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+}
+
+@media screen and (max-width: 500px) {
+  .logo {
+    display: block;
+    margin: 0 auto;
+  }
+}

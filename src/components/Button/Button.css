@@ -1,0 +1,34 @@
+.button {
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  background: #2BE080;
+  color: #fff;
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  padding: 13px 0;
+  margin: 69px 0 16px;
+  width: 100%;
+  cursor: pointer;
+  -webkit-transition: .3s linear;
+  -moz-transition: .3s linear;
+  transition: .3s linear;
+  box-shadow: inset 0 0 0 0 #000;
+}
+
+.button:hover {
+  box-shadow: inset 0 0 0 30px #000;
+  color: #2BE080;
+}
+
+@media screen and (max-width: 320px) {
+  .button {
+    margin: 157px 0 14px;
+  }
+}

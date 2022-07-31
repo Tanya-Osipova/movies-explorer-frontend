@@ -1,0 +1,94 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: .3s linear;
+}
+
+.popup.active {
+  pointer-events: all;
+  opacity: 1;
+}
+
+.popup__content {
+  width: 350px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  transform: scale(0);
+  transition: .3s linear;
+}
+
+.popup__content.active {
+  transform: scale(1);
+}
+
+.popup__close-button {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  background: url('../../images/icons/close.svg') no-repeat center;
+  background-size: 100%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  -webkit-transition: .3s linear;
+  -moz-transition: .3s linear;
+  transition: .3s linear;
+}
+
+.popup__close-button:hover {
+  box-shadow: 0px 0px 5px #000;
+}
+
+.popup__message-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.popup__image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.popup__message {
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  color: #000;
+  margin: 10px 0 0 0;
+}
+
+@media screen and (max-width: 500px) {
+  .popup__content {
+    width: 250px;
+  }
+
+  .popup__message {
+    font-size: 18px;
+  }
+}
