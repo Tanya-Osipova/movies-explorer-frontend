@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Main from '../Main/Main';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
@@ -12,8 +12,15 @@ import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton';
 //import successIcon from '../../images/icons/success.svg';
 //import failedIcon from '../../images/icons/failed.svg';
 import '../../vendor/fonts/fonts.css';
+import ProtectedRoute from "../ProtectedRoute";
 
-function App() {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false
+    }
+  }
   /*
   const [popupActive, setPopupActive] = useState(false);
 
@@ -30,10 +37,27 @@ function App() {
     }   
   }
   */
+  render() {
   return (
     <div className='app'>
       <Popup />
       <Switch>
+         
+        <ProtectedRoute 
+          path='/movies'
+          loggedIn={this.state.loggedIn}
+          component={Movies}
+        />
+        <ProtectedRoute 
+          path='/saved-movies'
+          loggedIn={this.state.loggedIn}
+          component={SavedMovies}
+        />
+        <ProtectedRoute 
+          path='/profile'
+          loggedIn={this.state.loggedIn}
+          component={Profile}
+        />
         <Route exact path='/'>
           <Main />
         </Route>  
@@ -42,21 +66,21 @@ function App() {
         </Route>
         <Route path='/signup'>
           <Register />
-        </Route>  
-        <Route path='/movies'>
-          <Movies />
-        </Route>
-         <Route path='/saved-movies'>
-          <SavedMovies />
-        </Route>
-        <Route path='/profile'>
-          <Profile />
-        </Route>
-        <Route path='*'>
+        </Route> 
+        {/* <Route path='*'>
           <PageNotFound />
-        </Route>
+        </Route> */}
+        <Route>
+          {this.state.loggedIn ? (
+            <Redirect to="/movies" />
+          ) : (
+            <Redirect to="/signin" />
+          )}
+        </Route> 
+
+        
       </Switch> 
-      <ScrollToTopButton />
+      {/* <ScrollToTopButton /> */}
       {/*       
       <Popup 
         active={popupActive} 
@@ -68,6 +92,7 @@ function App() {
       */}
     </div>
   );
+  }
 }
 
 export default App;

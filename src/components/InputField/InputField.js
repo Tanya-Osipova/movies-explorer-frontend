@@ -10,7 +10,7 @@ const InputField = ({ type, id, name, children, value, onChange }) => (
       id={id}
       name={name}
       value={value}
-      onChange={event => onChange(event.target.value)}
+      onChange={onChange}
     />
   </label>
 );
