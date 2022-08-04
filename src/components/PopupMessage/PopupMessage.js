@@ -24,7 +24,6 @@ const PopupMessage = (props) => {
    }
 
   return (
-    <>
     <Popup
       active={popupActive} 
       setActive={setPopupActive}
@@ -40,8 +39,6 @@ const PopupMessage = (props) => {
         </p>
       </div>  
     </Popup> 
-    {/* <button onClick={() => setPopupActive(true)}>click</button>   */}
-    </>
   );
 }
 

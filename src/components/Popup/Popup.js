@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Popup.css';
 
 const Popup = ({ active, setActive, children }) => {
@@ -13,29 +13,3 @@ const Popup = ({ active, setActive, children }) => {
 }
 
 export default Popup;
-/*
-  const [popupActive, setPopupActive] = useState(false);
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleEscapeKey);
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, [popupActive]);
-
-  function handleEscapeKey(e) {
-    if(e.key === 'Escape') {
-      setPopupActive(false)
-    }   
-  }
-  */
-
-   {/*       
-      <Popup 
-        active={popupActive} 
-        setActive={setPopupActive} 
-        message='You are successfully registered!'
-        icon={successIcon}
-      />
-      <button onClick={() => setPopupActive(true)}>click</button>  
-      */}

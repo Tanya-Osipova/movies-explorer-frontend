@@ -32,7 +32,6 @@ class Login extends React.Component {
     if (!this.state.email || !this.state.password) {
       return;
     }
-
     userAuth.authorize(this.state.email, this.state.password)
     .then((data) => {
       if (data) {

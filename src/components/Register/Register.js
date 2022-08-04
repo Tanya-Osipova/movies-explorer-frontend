@@ -31,8 +31,7 @@ class Register extends React.Component {
   // HANDLE SUBMIT
   handleSubmit(e) {
     e.preventDefault()
-   
-    if(this.state.password) {
+    if (this.state.password) {
       const { username, email, password } = this.state;
       userAuth.register(username, email, password).then((res) => {
         if(res) {
