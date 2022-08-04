@@ -1,10 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'; 
+import * as userAuth from '../../utils/userAuth.js';
 import FormContainer from '../FormContainer/FormContainer';
-import InputField from '../InputField/InputField';
+import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
 import Logo from '../Logo/Logo';
-import * as userAuth from '../../utils/userAuth.js';
+import PopupMessage from '../PopupMessage/PopupMessage.js';
 import './Register.css';
 
 class Register extends React.Component {
@@ -14,9 +15,11 @@ class Register extends React.Component {
       username: '',
       email: '',
       password: '',
+      popup: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
   }
   // HANDLE CHANGE
   handleChange(e) {
@@ -28,6 +31,7 @@ class Register extends React.Component {
   // HANDLE SUBMIT
   handleSubmit(e) {
     e.preventDefault()
+   
     if(this.state.password) {
       const { username, email, password } = this.state;
       userAuth.register(username, email, password).then((res) => {
@@ -35,11 +39,22 @@ class Register extends React.Component {
           this.setState({
             message: 'Success'
           }, () => {
-            this.props.history.push('/signin');
+              this.setState({ popup : true });
+              const timer = setTimeout(() => {
+              this.setState({ popup : false });
+              this.props.history.push('/signin')
+            }, 3000)
+            return () => clearTimeout(timer)
           })
         } else {
           this.setState({
             message: 'Error'
+          }, () => {
+            this.setState({ popup : true });
+            const timer = setTimeout(() => {
+            this.setState({ popup : false });
+            }, 3000);
+            return () => clearTimeout(timer)
           })
         }
       })
@@ -58,7 +73,7 @@ class Register extends React.Component {
           onSubmit={this.handleSubmit}
         >
           {/* USERNAME */}
-          <InputField 
+          <FormInput 
             type='text'
             id='username'
             name='username'
@@ -66,32 +81,41 @@ class Register extends React.Component {
             onChange={this.handleChange}
           >
             Username
-          </InputField>
+          </FormInput>
           {/* EMAIL */}
-          <InputField
+          <FormInput
             type='email'
             id='email'
             name='email'
             value={this.state.email} 
             onChange={this.handleChange}
+            required
+            errorTypes={["typeMismatch"]} 
+            errorMessage="Please enter a valid email!"
           >
             Email
-          </InputField>
+          </FormInput>
           {/* PASSWORD */}
-          <InputField 
+          <FormInput 
             type='password'
             id='password'
             name='password'
             value={this.state.password} 
             onChange={this.handleChange}
+            required
           >
             Password
-          </InputField>
+          </FormInput>
           {/* BUTTON */}
           <Button type="submit">
             Sign up
           </Button>
         </FormContainer>
+        {/* MESSAGE POPUP */}
+        <PopupMessage 
+          message={this.state.message}
+          isOpen={this.state.popup}
+        />
       </div>
     )
   }
