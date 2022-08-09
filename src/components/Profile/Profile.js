@@ -2,16 +2,22 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import './Profile.css';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { api } from '../../utils/MainApi';
+
 
 function Profile(props) {
-  //let { username, email} = props.userData;
-  // const history = useHistory();
+  const currentUser = React.useContext(CurrentUserContext);
+  const history = useHistory();
 
-  // function signOut() {
-  //   localStorage.removeItem('token');
-  //   history.push('/signin');
-  // }
-
+  function signOut() {
+    api.signout().then(() => {
+      localStorage.setItem('loggedIn', false)
+      history.push('/signin')
+    })
+    .catch(err => console.log(err))
+  }
+  
   return (
     <>
       <NavigationAuth />
@@ -23,11 +29,11 @@ function Profile(props) {
           <div className="profile__info">
             <div className="profile__user">
               <p className="profile__key">Name</p>
-              <p className="profile__value">{props.username}</p>
+              <p className="profile__value">{currentUser.name}</p>
             </div>
             <div className="profile__user">
               <p className="profile__key">Email</p>
-              <p className="profile__value">{props.email}</p>
+              <p className="profile__value">{currentUser.email}</p>
             </div>
           </div>
           <button className="profile__button" type="button">
@@ -36,7 +42,7 @@ function Profile(props) {
           <button 
             className="profile__button" 
             type="button"
-            // onClick={signOut}
+            onClick={signOut}
             >
             Sign out
           </button>

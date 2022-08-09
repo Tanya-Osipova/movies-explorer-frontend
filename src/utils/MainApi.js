@@ -10,7 +10,7 @@ export default class Api {
       if(res.ok) {
         return res.json();
       }
-      throw 'Ошибка запроса'
+      throw 'error'
     }).then((obj) => {
       return obj;
     })
@@ -19,7 +19,8 @@ export default class Api {
   // Get User Info
   getUserInfo() {
     const promise = fetch(`${this._url}/users/me`, {
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
 
     return this._makeRequest(promise);
@@ -31,6 +32,7 @@ export default class Api {
     const promise = fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: name,
       })
@@ -38,13 +40,23 @@ export default class Api {
   
     return this._makeRequest(promise);
   }
+
+  //SignOut
+  signout() {
+    const promise = fetch(`${this._url}/signout`, {
+      headers: this._headers,
+      credentials: 'include',
+
+    })
+    return this._makeRequest(promise);
+  }
 }
 
 // Api
 export const api = new Api({
-  url: '',
+  url: 'http://localhost:3001/api',
   headers: {
-    authorization: '',
     'Content-Type': 'application/json'
-  }
+  },
+
 }); 

@@ -4,7 +4,7 @@ import data from '../../data';
 import './MoviesCardList.css'
 
 function MoviesCardList(props) {
-  const cards = data.map(card => {
+  const cards = props.cards.map(card => {
     return (
       <MoviesCard
         key={card.id}

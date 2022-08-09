@@ -89,8 +89,6 @@ class Register extends React.Component {
             value={this.state.email} 
             onChange={this.handleChange}
             required
-            errorTypes={["typeMismatch"]} 
-            errorMessage="Please enter a valid email!"
           >
             Email
           </FormInput>

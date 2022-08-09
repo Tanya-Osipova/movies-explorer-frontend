@@ -34,6 +34,7 @@ export const register = (username, email, password) => {
 export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -46,6 +47,7 @@ export const authorize = (email, password) => {
   .then((res) => {
     try {
       if (res.status === 200){
+
         return res.json();
       }
     } catch(e){
@@ -62,6 +64,7 @@ export const authorize = (email, password) => {
 export const getContent = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
+    credentials: 'include',
     headers: {
       "Content-Type": "application/json",
       'Accept': 'application/json',

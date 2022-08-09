@@ -2,7 +2,7 @@ import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-function SearchForm() {
+function SearchForm({ searchTerm, onSearchInput, onSearchSubmit }) {
   const [checked, setChecked] = React.useState(true);
 
   const handleChange = () => {
@@ -10,15 +10,22 @@ function SearchForm() {
   };
 
   return (
-    <form className="search-form">
+    <form className="search-form" onSubmit={onSearchSubmit}>
       <input 
         className="search-form__input"
         type="text" 
         id="search" 
         name="search" 
         placeholder="Search.."
-      />
-      <button className="search-form__button" type="submit"></button>
+        value={searchTerm}
+        onInputChange={onSearchInput}
+      /> 
+      <button 
+        className="search-form__button" 
+        type="submit" 
+        disabled={!searchTerm}
+      >
+      </button>
       <FilterCheckbox 
         label="Short film"
         value={checked}
