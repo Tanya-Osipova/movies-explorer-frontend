@@ -23,7 +23,43 @@ function App() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const history = useHistory();
+/*
+  // Reducer
+  const moviesReducer = (state, action) => {
+    switch (action.type) {
+      case 'MOVIES_FETCH_INIT':
+        return {
+          ...state,
+          isLoading: true,
+          isError: false,
+        };
+      case 'MOVIES_FETCH_SUCCESS':
+        return {
+          ...state,
+          isLoading: false,
+          isError: false,
+          data: action.payload,
+        };
+      case 'MOVIES_FETCH_FAILURE':
+        return {
+          ...state,
+          isLoading: false,
+          isError: true,
+        };
+      default:
+        throw new Error();
+    }
+  };
+  
+  const [movies, dispatchMovies] = React.useReducer(
+    moviesReducer,
+    { data: [], isLoading: false, isError: false }
+  );
 
+  const searchedMovies = movies.data.filter((movie) =>
+    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  */
   
   useEffect(() => {
   // Check cookie on reload
@@ -55,11 +91,26 @@ function App() {
         setMovies(movie)
         setIsLoading(false);
       })
-      .catch(() => setIsError(true));
-    //.catch(err => {
-    //   console.log(err); 
-    // });
+      .catch(() => setIsError(true))
+      .catch(err => {
+        console.log(err); 
+      });
     
+   /*
+   dispatchMovies({ type: 'MOVIES_FETCH_INIT' })
+
+   moviesApi.getMovies()
+    .then((response) => response.json()) 
+    .then((result) => {
+      dispatchMovies({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.hits,
+      });
+    })
+    .catch(() => 
+      dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
+    );
+    */
   }, [loggedIn])
 
 
@@ -69,6 +120,7 @@ function App() {
     setLoggedIn(true);
   }
 
+  // GET USER INFO
   function checkCookie() {
     api.getUserInfo().then((res) => {
       setLoggedIn(true)
@@ -78,7 +130,14 @@ function App() {
     .catch(err => {
       console.log(err); 
     });
+  }
 
+  // UPDATE USER
+  function handleUpdateUser(user) {
+    api.updateProfile(user.name, user.email).then((res) => {
+      setCurrentUser(res.data)
+    })
+    .catch(err => console.log(err))
   }
    
   return (
@@ -102,6 +161,7 @@ function App() {
             path='/profile'
             loggedIn={loggedIn}
             component={Profile}
+            onUpdateUser={handleUpdateUser}
           />
           <Route exact path='/'>
             <Main />

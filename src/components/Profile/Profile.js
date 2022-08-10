@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import NavigationAuth from '../NavigationAuth/NavigationAuth';
-import './Profile.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { api } from '../../utils/MainApi';
-
+import Popup from '../Popup/Popup';
+import ProfileUpdate from '../ProfileUpdate/ProfileUpdate';
+import './Profile.css';
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
+  const [popupActive, setPopupActive] = useState(false);
   const history = useHistory();
+  
+  // POPUP
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscapeKey);
+      return () => {
+        document.removeEventListener("keydown", handleEscapeKey);
+      };
+  }, [popupActive]);
 
+  function handleEscapeKey(e) {
+    if(e.key === 'Escape') {
+      setPopupActive(false)
+    }   
+  }
+
+  // SIGNOUT
   function signOut() {
-    api.signout().then(() => {
+    api.signOut().then(() => {
       localStorage.setItem('loggedIn', false)
-      history.push('/signin')
+      history.push('/')
     })
     .catch(err => console.log(err))
   }
@@ -36,7 +53,11 @@ function Profile(props) {
               <p className="profile__value">{currentUser.email}</p>
             </div>
           </div>
-          <button className="profile__button" type="button">
+          <button 
+            className="profile__button" 
+            type="button"
+            onClick={() => setPopupActive(true)}
+          >
             Update Profile
           </button>
           <button 
@@ -48,6 +69,16 @@ function Profile(props) {
           </button>
         </div>
       </div>
+      {/* UPDATE */}
+      <Popup
+        active={popupActive} 
+        setActive={setPopupActive}
+      >
+        <ProfileUpdate 
+          onUpdateUser={props.onUpdateUser}
+          setActive={setPopupActive}
+        />
+      </Popup>
     </>
   );
 }

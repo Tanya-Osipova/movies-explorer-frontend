@@ -14,6 +14,7 @@ export default class Api {
     }).then((obj) => {
       return obj;
     })
+    .catch((err) => console.log(err))
   }
   
   // Get User Info
@@ -22,27 +23,25 @@ export default class Api {
       headers: this._headers,
       credentials: 'include',
     })
-
     return this._makeRequest(promise);
   }
 
-
   // Update Profile
-  updateProfile(name) {
+  updateProfile(name, email) {
     const promise = fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       credentials: 'include',
       body: JSON.stringify({
-        name: name,
+        name,
+        email,
       })
     });
-  
     return this._makeRequest(promise);
   }
 
   //SignOut
-  signout() {
+  signOut() {
     const promise = fetch(`${this._url}/signout`, {
       headers: this._headers,
       credentials: 'include',
@@ -58,5 +57,4 @@ export const api = new Api({
   headers: {
     'Content-Type': 'application/json'
   },
-
 }); 
