@@ -15,52 +15,41 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
 import SearchForm from '../SearchForm/SearchForm.js';
+import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [currentUser, setCurrentUser] = useState({});
-  const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const history = useHistory();
-/*
-  // Reducer
-  const moviesReducer = (state, action) => {
-    switch (action.type) {
-      case 'MOVIES_FETCH_INIT':
-        return {
-          ...state,
-          isLoading: true,
-          isError: false,
-        };
-      case 'MOVIES_FETCH_SUCCESS':
-        return {
-          ...state,
-          isLoading: false,
-          isError: false,
-          data: action.payload,
-        };
-      case 'MOVIES_FETCH_FAILURE':
-        return {
-          ...state,
-          isLoading: false,
-          isError: true,
-        };
-      default:
-        throw new Error();
+
+  // Movie filtering reducer
+  const movieFilter = (movie, searchText, searchOption) => {
+    if (movie.nameRU){
+      return movie.nameRU.tolower.includes(searchText)
     }
-  };
-  
-  const [movies, dispatchMovies] = React.useReducer(
+    return false
+  }
+
+  const moviesReducer = (state, action) => {
+    const filteredMovies = action.movie.filter(m => m.duration < (action.searchOption ? 40 : 1000))
+    const filteredName = filteredMovies.filter(m => {
+      console.log(m.nameRU)
+      return m.nameRU.toLowerCase.includes(action.searchText)
+    })
+    return {
+      ...state,
+      data: filteredName,
+      isLoading: true,
+      isError: false
+    }
+  }
+  const [movies, setMovies] = useReducer(
     moviesReducer,
     { data: [], isLoading: false, isError: false }
-  );
+  ); 
 
-  const searchedMovies = movies.data.filter((movie) =>
-    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  */
-  
   useEffect(() => {
   // Check cookie on reload
   if (localStorage.getItem('loggedIn')){
@@ -70,10 +59,7 @@ function App() {
   },[])
 
   useEffect(() => {
-    setIsLoading(true);
-
     if (!loggedIn) return;
-
     // User info
     api.getUserInfo()
       .then((res) => {
@@ -85,33 +71,21 @@ function App() {
       });
     
     // Movies
-    moviesApi.getMovies()
-      .then((movie) => {
-        console.log(movie)
-        setMovies(movie)
-        setIsLoading(false);
-      })
-      .catch(() => setIsError(true))
-      .catch(err => {
-        console.log(err); 
-      });
+  
+    // moviesApi.getMovies()
+    //   .then((movie) => {
+    //     console.log(movie)
+    //     setMovies(movie)
+    //     setIsLoading(false);
+    //   })
+    //   .catch(() => setIsError(true))
+    //   .catch(err => {
+    //     console.log(err); 
+    //   });
     
-   /*
-   dispatchMovies({ type: 'MOVIES_FETCH_INIT' })
+   
 
-   moviesApi.getMovies()
-    .then((response) => response.json()) 
-    .then((result) => {
-      dispatchMovies({
-        type: 'STORIES_FETCH_SUCCESS',
-        payload: result.hits,
-      });
-    })
-    .catch(() => 
-      dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
-    );
-    */
-  }, [loggedIn])
+  }, [loggedIn]);
 
 
   // LOGIN
@@ -139,6 +113,19 @@ function App() {
     })
     .catch(err => console.log(err))
   }
+
+  // Seach movies
+  function handleSearch(searchText, searchOption) {
+    moviesApi.getMovies()
+      .then((movie) => {
+        console.log(movie)
+        // FIlter data
+        setMovies({movie, searchText, searchOption})
+      })
+      .catch(err => {
+        console.log(err); 
+      });
+  }
    
   return (
     <div className='app'>
@@ -149,7 +136,8 @@ function App() {
             loggedIn={loggedIn}
             isLoading={isLoading}
             isError={isError}
-            cards={movies}
+            list={movies.data}
+            onSearchSubmit={handleSearch}
             component={Movies}
           />
           <ProtectedRoute 

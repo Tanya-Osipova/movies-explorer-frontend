@@ -7,29 +7,13 @@ import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
-  // const [searchTerm, setSearchTerm] = useState('');
-
-  // const handleSearchInput = (event) => {
-  //   setSearchTerm = event.target.value;
-  // };
-
-  // const searchedMovies = movies.filter(function (movie) {
-  //   return movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-  // });
-
-  // const handleSearchSubmit = (event) => {
-  
-  //   event.preventDefault();
-  // };
-
-
   return (
     <>
       <NavigationAuth />
       <SearchForm 
-        //searchTerm={searchTerm}
-        //onSearchInput={handleSearchInput}
-        // onSearchSubmit={handleSearchSubmit}
+        // searchTerm={searchTerm}
+        // onSearchInput={handleSearchInput}
+        onSearchSubmit={props.onSearchSubmit}
       />
 
       {props.isError && <p>Something went wrong ...</p>}
@@ -37,7 +21,7 @@ function Movies(props) {
       {props.isLoading ? (
         <Preloader />
       ) : (
-        <MoviesCardList cards={props.cards} />
+        <MoviesCardList list={props.list} />
       )}
 
       <MoreButton>More</MoreButton>

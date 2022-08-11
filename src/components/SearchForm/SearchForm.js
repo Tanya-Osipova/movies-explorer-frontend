@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-function SearchForm({ searchTerm, onSearchInput, onSearchSubmit }) {
-  const [checked, setChecked] = React.useState(true);
+function SearchForm({ onSearchSubmit }) {
+  const [checked, setChecked] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleChange = () => {
+  const handleFilterChange = () => {
     setChecked(!checked);
   };
+  const handleSearchInput = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    onSearchSubmit(searchTerm, checked)
+  }
 
   return (
-    <form className="search-form" onSubmit={onSearchSubmit}>
+    <form className="search-form" onSubmit={handleSearchSubmit}>
       <input 
         className="search-form__input"
         type="text" 
@@ -18,7 +26,7 @@ function SearchForm({ searchTerm, onSearchInput, onSearchSubmit }) {
         name="search" 
         placeholder="Search.."
         value={searchTerm}
-        onInputChange={onSearchInput}
+        onChange={handleSearchInput}
       /> 
       <button 
         className="search-form__button" 
@@ -29,7 +37,7 @@ function SearchForm({ searchTerm, onSearchInput, onSearchSubmit }) {
       <FilterCheckbox 
         label="Short film"
         value={checked}
-        onChange={handleChange}
+        onChange={handleFilterChange}
       />
     </form>
   );
