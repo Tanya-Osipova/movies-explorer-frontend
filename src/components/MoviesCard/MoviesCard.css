@@ -59,8 +59,7 @@
   transition: .3s linear;
 }
 
-.movies-card__save-button:hover,
-.movies-card__save-button:focus {
+.movies-card__save-button:hover {
   transform: scale(1.1);
   box-shadow: 0px 0px 5px #000;
 }
@@ -99,8 +98,7 @@
     width: calc(100% - 2 * 10px);
     height: 236px;
     margin: auto;
-    margin-bottom: 16px;
-
+    margin-bottom: 2rem;
   }
 
   .movies-card__title {
@@ -111,6 +109,6 @@
 @media screen and (min-width: 400px) {
   .movies-card:hover {
     transform: scale(1.1);
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 }

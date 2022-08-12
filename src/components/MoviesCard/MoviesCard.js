@@ -23,8 +23,7 @@ function MoviesCard({ card }) {
       >
         <img 
           className="movies-card__image" 
-          // src={`https://api.nomoreparties.co/beatfilm-movies${card.image.url}`} 
-          src={card.image.url} 
+          src={`https://api.nomoreparties.co/${card.image.url}`} 
           alt={card.nameEN} 
         />
       </Link>

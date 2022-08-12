@@ -22,7 +22,7 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 20px;
-  color: #2BE080;
+  color: #000;
   border: none;
   border-radius: 9px;
   outline: none;
@@ -40,8 +40,7 @@
 }
 
 .search-form__input:focus {
-  box-shadow: 0 0 2px 2px #000;
-  box-shadow: inset 5px 0 0 0 #2BE080;
+  background-color: #2BE080;
 }
 
 .search-form__button {
