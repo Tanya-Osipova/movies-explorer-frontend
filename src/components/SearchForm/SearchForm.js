@@ -9,9 +9,11 @@ function SearchForm({ onSearchSubmit }) {
   const handleFilterChange = () => {
     setChecked(!checked);
   };
+
   const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
   };
+  
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     onSearchSubmit(searchTerm, checked)

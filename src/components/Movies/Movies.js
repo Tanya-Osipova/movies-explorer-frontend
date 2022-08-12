@@ -11,14 +11,12 @@ function Movies(props) {
     <>
       <NavigationAuth />
       <SearchForm 
-        // searchTerm={searchTerm}
-        // onSearchInput={handleSearchInput}
         onSearchSubmit={props.onSearchSubmit}
       />
 
-      {props.isError && <p>Something went wrong ...</p>}
+      {props.movies.isError && <p>Something went wrong ...</p>}
 
-      {props.isLoading ? (
+      {props.movies.isLoading ? (
         <Preloader />
       ) : (
         <MoviesCardList list={props.list} />

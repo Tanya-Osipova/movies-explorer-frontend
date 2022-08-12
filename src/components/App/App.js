@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import * as userAuth from '../../utils/userAuth.js';
 import Main from '../Main/Main';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
@@ -8,47 +7,66 @@ import Register from '../Register/Register';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-import ScrollToTopButton from '../ScrollToTopButton/ScrollToTopButton';
 import '../../vendor/fonts/fonts.css';
 import ProtectedRoute from "../ProtectedRoute";
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
-import SearchForm from '../SearchForm/SearchForm.js';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [currentUser, setCurrentUser] = useState({});
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
   const history = useHistory();
-
-  // Movie filtering reducer
-  const movieFilter = (movie, searchText, searchOption) => {
-    if (movie.nameRU){
-      return movie.nameRU.tolower.includes(searchText)
-    }
-    return false
-  }
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search');
+  const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption');
 
   const moviesReducer = (state, action) => {
-    const filteredMovies = action.movie.filter(m => m.duration < (action.searchOption ? 40 : 1000))
-    const filteredName = filteredMovies.filter(m => {
-      console.log(m.nameRU)
-      return m.nameRU.toLowerCase.includes(action.searchText)
-    })
-    return {
-      ...state,
-      data: filteredName,
-      isLoading: true,
-      isError: false
+    switch (action.type) {
+      case 'MOVIES_FETCH_INIT':
+        return {
+          ...state,
+          isLoading: true,
+          isError: false,
+        };
+      case 'MOVIES_FETCH_SUCCESS':
+        return {
+          ...state,
+          isLoading: false,
+          isError: false,
+          data: action.payload,
+        };
+      case 'MOVIES_FETCH_FAILURE':
+        return {
+          ...state,
+          isLoading: false,
+          isError: true,
+        };
+      default:
+        throw new Error();
     }
-  }
-  const [movies, setMovies] = useReducer(
+  };
+
+  const [movies, dispatchMovies] = useReducer(
     moviesReducer,
     { data: [], isLoading: false, isError: false }
-  ); 
+  );
+  
+  useEffect(() => {
+    dispatchMovies({ type: 'MOVIES_FETCH_INIT' });
+
+    moviesApi.getMovies()
+      .then((result) => {
+        dispatchMovies({
+          type: 'MOVIES_FETCH_SUCCESS',
+          payload: result,
+        });
+      })
+      .catch(() =>
+        dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
+      );
+  }, []);
+
 
   useEffect(() => {
   // Check cookie on reload
@@ -82,11 +100,22 @@ function App() {
     //   .catch(err => {
     //     console.log(err); 
     //   });
-    
-   
-
   }, [loggedIn]);
 
+  // FILTER MOVIES
+  const searchedMovies = movies.data.filter((movie) => {
+    console.log(movie)
+    if (movie.nameEN) {
+      return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
+    }
+    return false
+  })
+  .filter((movie) => {
+    if (movie.duration >= 40 && searchTermOption){
+      return false
+    }
+    return movie
+  });
 
   // LOGIN
   function handleLogin(e) {
@@ -114,17 +143,22 @@ function App() {
     .catch(err => console.log(err))
   }
 
-  // Seach movies
-  function handleSearch(searchText, searchOption) {
+  // SEARCH
+  function handleSearch(text, option) {
     moviesApi.getMovies()
-      .then((movie) => {
-        console.log(movie)
-        // FIlter data
-        setMovies({movie, searchText, searchOption})
+      .then((result) => {
+        console.log(result)
+        setSearchTerm(text);
+        setSearchTermOption(option);
+        dispatchMovies({
+          type: 'MOVIES_FETCH_SUCCESS',
+          payload: result,
+        });
+        console.log(searchedMovies);
       })
-      .catch(err => {
-        console.log(err); 
-      });
+      .catch(() =>
+        dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
+      );
   }
    
   return (
@@ -134,9 +168,8 @@ function App() {
           <ProtectedRoute 
             path='/movies'
             loggedIn={loggedIn}
-            isLoading={isLoading}
-            isError={isError}
-            list={movies.data}
+            movies={movies}
+            list={searchedMovies}
             onSearchSubmit={handleSearch}
             component={Movies}
           />
@@ -166,11 +199,9 @@ function App() {
             <PageNotFound />
           </Route> 
         </Switch> 
-        {/* <ScrollToTopButton /> */}
       </CurrentUserContext.Provider>
     </div>
   );
-  
 }
 
 export default App;
