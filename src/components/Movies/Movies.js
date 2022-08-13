@@ -13,7 +13,11 @@ function Movies(props) {
         onSearchSubmit={props.onSearchSubmit}
       />
 
-      {props.movies.isError && <p style={{textAlign: 'center', fontWeight: 'bold'}}>Something went wrong ...</p>}
+      {props.movies.isError && 
+        <p className='message-info'>
+          Error while loading data. Try again later!
+        </p>
+      }
 
       {props.movies.isLoading ? (
         <Preloader />

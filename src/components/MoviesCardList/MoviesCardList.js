@@ -4,15 +4,20 @@ import MoreButton from '../MoreButton/MoreButton';
 import './MoviesCardList.css'
 
 const MoviesCardList = ({ list }) => {
-  const [next, setNext] = React.useState(3);
+  const screenWidth = window.innerWidth;
+  const [more, setMore] = React.useState(3);
   
   const handleMore = () => {
-    setNext((prevValue) => prevValue + 3);
+    if (screenWidth >= 1280) {
+      setMore((prevValue) => prevValue + 3);
+    } else {
+      setMore((prevValue) => prevValue + 2);
+    }
   };
 
   if (!list.length) {
     return (
-      <p className="movies-card-list__not-found">
+      <p className="message-info">
         No movies were found
       </p>
     )
@@ -21,7 +26,7 @@ const MoviesCardList = ({ list }) => {
   return (
     <>
       <ul className="movies-card-list">
-        {list.slice(0, next).map((card) => (
+        {list.slice(0, more).map((card) => (
           <MoviesCard 
             key={card.id} 
             card={card} 
@@ -29,7 +34,7 @@ const MoviesCardList = ({ list }) => {
         ))}
       </ul>
 
-      {next < list.length && (
+      {more < list.length && (
         <MoreButton
           type="button"
           onClick={handleMore}

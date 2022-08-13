@@ -13,6 +13,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { api } from '../../utils/MainApi';
 import { moviesApi } from '../../utils/MoviesApi';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
+import './App.css';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);

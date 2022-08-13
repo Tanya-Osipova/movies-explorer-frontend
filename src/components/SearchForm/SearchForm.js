@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
+import InputWithValidator from '../InputWithValidator/InputWithValidator';
 import './SearchForm.css';
 
 function SearchForm({ onSearchSubmit }) {
@@ -21,15 +22,17 @@ function SearchForm({ onSearchSubmit }) {
 
   return (
     <form className="search-form" onSubmit={handleSearchSubmit}>
-      <input 
+      <InputWithValidator
         className="search-form__input"
-        type="text" 
-        id="search" 
-        name="search" 
+        props={{ type: "text", required: true }}
+        id="search"
+        name="search"
         placeholder="Search.."
+        checks={["valueMissing"]}
+        errorMessage="You need to enter a keyword!"
         value={searchTerm}
         onChange={handleSearchInput}
-      /> 
+      />
       <button 
         className="search-form__button" 
         type="submit" 
