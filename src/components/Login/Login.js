@@ -91,7 +91,7 @@ class Login extends React.Component {
             Password
           </FormInput>
           {/* BUTTON */}
-          <Button type="submit">
+          <Button type="submit" className="button">
             Login
           </Button>
         </FormContainer>

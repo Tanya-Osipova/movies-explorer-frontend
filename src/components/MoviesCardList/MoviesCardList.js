@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import MoreButton from '../MoreButton/MoreButton';
+import Button from '../Button/Button';
 import './MoviesCardList.css'
 
 const MoviesCardList = ({ list }) => {
   const screenWidth = window.innerWidth;
-  const [more, setMore] = React.useState(3);
+  const [more, setMore] = useState(3);
   
   const handleMore = () => {
     if (screenWidth >= 1280) {
@@ -18,7 +18,7 @@ const MoviesCardList = ({ list }) => {
   if (!list.length) {
     return (
       <p className="message-info">
-        No movies were found
+        No movies matched your search criteria
       </p>
     )
   }
@@ -35,12 +35,13 @@ const MoviesCardList = ({ list }) => {
       </ul>
 
       {more < list.length && (
-        <MoreButton
+        <Button
+          className="more-button"
           type="button"
           onClick={handleMore}
         >
           More
-        </MoreButton> 
+        </Button> 
       )}
     </>
   )

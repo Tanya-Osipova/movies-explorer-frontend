@@ -104,7 +104,7 @@ class Register extends React.Component {
             Password
           </FormInput>
           {/* BUTTON */}
-          <Button type="submit">
+          <Button type="submit" className="button">
             Sign up
           </Button>
         </FormContainer>
