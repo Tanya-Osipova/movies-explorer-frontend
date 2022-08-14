@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import InputWithValidator from '../InputWithValidator/InputWithValidator';
+import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
+
 import './SearchForm.css';
 
 function SearchForm({ onSearchSubmit }) {
-  const [checked, setChecked] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [checked, setChecked] = useSemiPersistentState('searchOption',false);
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
 
   const handleFilterChange = () => {
     setChecked(!checked);

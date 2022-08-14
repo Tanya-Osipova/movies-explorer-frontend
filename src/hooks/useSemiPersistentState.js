@@ -1,12 +1,14 @@
 import React from 'react';
 
 const useSemiPersistentState = (key, initialState) => {
+  const jsonValue = JSON.parse(localStorage.getItem(key))
+  console.log(initialState)
   const [value, setValue] = React.useState(
-    localStorage.getItem(key) || initialState
+    jsonValue || initialState
   );
 
   React.useEffect(() => {
-    localStorage.setItem(key, value)
+    localStorage.setItem(key, JSON.stringify(value))
   }, [value, key]);
 
   return [value, setValue];

@@ -19,8 +19,10 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [currentUser, setCurrentUser] = useState({});
   const history = useHistory();
-  const [searchTerm, setSearchTerm] = useSemiPersistentState('search');
-  const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption');
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
+  const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
+  const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
+
 
   const moviesReducer = (state, action) => {
     switch (action.type) {
@@ -52,29 +54,15 @@ function App() {
     moviesReducer,
     { data: [], isLoading: false, isError: false }
   );
-  
-  useEffect(() => {
-    dispatchMovies({ type: 'MOVIES_FETCH_INIT' });
-
-    moviesApi.getMovies()
-      .then((result) => {
-        dispatchMovies({
-          type: 'MOVIES_FETCH_SUCCESS',
-          payload: result,
-        });
-      })
-      .catch(() =>
-        dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
-      );
-  }, []);
 
 
   useEffect(() => {
-  // Check cookie on reload
-  if (localStorage.getItem('loggedIn')){
-    setLoggedIn(localStorage.getItem('loggedIn'))//set status to saved in local storage
-  }
-  checkCookie()
+    // Check cookie on reload
+    if (localStorage.getItem('loggedIn')){
+      setLoggedIn(localStorage.getItem('loggedIn'))//set status to saved in local storage
+    }
+    api.getMovies().then((movies) => setSavedMovies(movies.data))
+    checkCookie()
   },[])
 
   useEffect(() => {
@@ -88,24 +76,10 @@ function App() {
         console.log(err);
         history.push('/signin') 
       });
-    
-    // Movies
-  
-    // moviesApi.getMovies()
-    //   .then((movie) => {
-    //     console.log(movie)
-    //     setMovies(movie)
-    //     setIsLoading(false);
-    //   })
-    //   .catch(() => setIsError(true))
-    //   .catch(err => {
-    //     console.log(err); 
-    //   });
   }, [loggedIn]);
 
   // FILTER MOVIES
   const searchedMovies = movies.data.filter((movie) => {
-    console.log(movie)
     if (movie.nameEN) {
       return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
     }
@@ -146,9 +120,9 @@ function App() {
 
   // SEARCH
   function handleSearch(text, option) {
+    dispatchMovies({ type: 'MOVIES_FETCH_INIT'})
     moviesApi.getMovies()
       .then((result) => {
-        console.log(result)
         setSearchTerm(text);
         setSearchTermOption(option);
         dispatchMovies({
@@ -161,6 +135,29 @@ function App() {
         dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
       );
   }
+
+  function handleSaveCard(card) {
+    const savedCard = {
+      country: card.country,
+      director: card.director,
+      duration: card.duration,
+      year: card.year,
+      description: card.description,
+      image: `https://api.nomoreparties.co/${card.image.url}`,
+      trailerLink: card.trailerLink,
+      thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
+      nameEN: card.nameEN,
+      nameRU: card.nameRU,
+      movieId: card.id
+    }
+    
+    api.saveCard(savedCard).then((newCard) => {
+      //dispatchMovies({type: 'SAVE_MOVIE'})
+      //TODO SAVE LOCAL STORAGE
+      setSavedMovies(savedMovies.concat(newCard))
+    })
+    .catch(err => console.log(err))
+  }
    
   return (
     <div className='app'>
@@ -172,11 +169,14 @@ function App() {
             movies={movies}
             list={searchedMovies}
             onSearchSubmit={handleSearch}
+            onSaveCard={handleSaveCard}
             component={Movies}
           />
           <ProtectedRoute 
             path='/saved-movies'
             loggedIn={loggedIn}
+            movies={movies}
+            onLoad={dispatchMovies}
             component={SavedMovies}
           />
           <ProtectedRoute 

@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import useSemiPersistentState from '../../hooks/useSemiPersistentState';
 import './MoviesCard.css'
 
-function MoviesCard({ card }) {
+function MoviesCard({ card, onSaveCard, ...props }) {
+  const [savedMovies,setSavedMovies] = useSemiPersistentState('savedMovies',[])
+//useeffect?
+// LEFT side checks all movies, right is true for saved-movies
+  const isSaved = savedMovies.some(movie => movie.movieId === card.id ) || card.movieId // only saved cards have movieId
+
+
+  const handleSaveCard = (savedCard) => {
+    onSaveCard(savedCard)
+  };
+
   return (
     <li className="movies-card">
       <div className="movies-card__info">
@@ -11,8 +22,9 @@ function MoviesCard({ card }) {
           <p className="movies-card__duration">{card.duration}</p>
         </div>
         <button 
-          className="movies-card__save-button"
+          className={`movies-card__save-button${isSaved ? props.icon : ""}`}
           type='button'
+          onClick={() => handleSaveCard(card)}
         >
         </button>
       </div>
@@ -23,7 +35,7 @@ function MoviesCard({ card }) {
       >
         <img 
           className="movies-card__image" 
-          src={`https://api.nomoreparties.co/${card.image.url}`} 
+          src={card.id ? `https://api.nomoreparties.co/${card.image.url}` : `${card.image}`} 
           alt={card.nameEN} 
         />
       </Link>

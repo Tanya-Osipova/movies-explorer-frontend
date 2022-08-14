@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import './FormInput.css';
 
-const FormInput = ({ type, id, name, children, value, onChange }) => {
+const FormInput = ({type, id, name, children, value, onChange }) => {
+  
+  
   return (
     <>
       <label className='form__label'>
@@ -15,9 +17,7 @@ const FormInput = ({ type, id, name, children, value, onChange }) => {
           onChange={onChange}
         />
       </label>
-      {/* <p className={`${isValid ? `form__error-message_hide` : `form__error-message`}`}>
-        
-      </p> */}
+      {/* <p className={`${isValid ? `form__error-message_hide` : `form__error-message`}`}>{errorMessage}</p> */}
     </>
   )
 };

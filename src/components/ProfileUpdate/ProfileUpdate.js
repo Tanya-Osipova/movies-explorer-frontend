@@ -3,6 +3,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import FormContainer from '../FormContainer/FormContainer';
 import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
+import InputWithValidator from '../InputWithValidator/InputWithValidator';
 
 function ProfileUpdate(props) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -37,7 +38,7 @@ function ProfileUpdate(props) {
       link=''
       onSubmit={handleSubmit} 
     >
-      <FormInput 
+      <FormInput
         type='text'
         id='username'
         name='username'
@@ -55,7 +56,7 @@ function ProfileUpdate(props) {
       >
         Email
       </FormInput>
-      <Button type='submit'>
+      <Button type='submit' className="button">
         Update
       </Button>
     </FormContainer>  

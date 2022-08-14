@@ -49,6 +49,26 @@ export default class Api {
     })
     return this._makeRequest(promise);
   }
+
+  //MOVIES
+  getMovies() {
+    const promise = fetch(`${this._url}/movies`, {
+      headers: this._headers,
+      credentials: 'include',
+    })
+    return this._makeRequest(promise);
+  }
+
+  saveCard(card) {
+    const promise = fetch(`${this._url}/movies`, {
+      method: 'POST',
+      headers: this._headers,
+      credentials: 'include',
+      body: JSON.stringify(card),
+    })
+    
+    return this._makeRequest(promise);
+  }
 }
 
 // Api
