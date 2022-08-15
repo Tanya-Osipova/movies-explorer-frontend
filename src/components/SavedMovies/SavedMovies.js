@@ -26,7 +26,11 @@ function SavedMovies(props) {
       {props.movies.isLoading ? (
         <Preloader />
       ) : (
-        <MoviesCardList list={listSavedMovies} icon={` movies-card__save-button_delete`}/>
+        <MoviesCardList 
+          list={listSavedMovies} 
+          onClick={props.onDeleteCard} 
+          icon={` movies-card__save-button_delete`}
+        />
       )}
       <Footer />
     </>

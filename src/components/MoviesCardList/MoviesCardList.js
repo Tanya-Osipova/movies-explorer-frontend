@@ -3,7 +3,7 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import Button from '../Button/Button';
 import './MoviesCardList.css'
 
-const MoviesCardList = ({ list, onSaveCard, ...props }) => {
+const MoviesCardList = ({ list, onClick, ...props }) => {
   const screenWidth = window.innerWidth;
   const [more, setMore] = useState(0);
   
@@ -43,7 +43,7 @@ const MoviesCardList = ({ list, onSaveCard, ...props }) => {
             key={card.id || card.movieId} 
             card={card}
             icon={props.icon}
-            onSaveCard={onSaveCard} 
+            onClick={onClick} 
           />
         ))}
       </ul>

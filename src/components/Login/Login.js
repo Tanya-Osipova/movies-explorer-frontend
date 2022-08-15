@@ -14,7 +14,7 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      popup: false
+      popup: false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,6 +26,7 @@ class Login extends React.Component {
       [name]: value 
     });
   }
+
   // HANDLE SUBMIT
   handleSubmit(e) {
     e.preventDefault()
@@ -70,23 +71,27 @@ class Login extends React.Component {
         >
           {/* EMAIL */}
           <FormInput
-            type='email'
+            // type='email'
+            props={{ type: "email", required: true }}
             id='email'
             name='email'
-            required
             value={this.state.email} 
             onChange={this.handleChange}
+            validators={["typeMismatch", "valueMissing"]}
+            errorMessage="Email is required! Please enter a valid email!"
           >
             Email
           </FormInput>
           {/* PASSWORD */}
           <FormInput 
-            type='password'
+            // type='password'
+            props={{ type: "password", minLength: "8", required: true }}
             id='password'
             name='password'
-            required
             value={this.state.password} 
             onChange={this.handleChange}
+            validators={["tooShort", "valueMissing"]}
+            errorMessage="Password is required! Password must be at least 8 characters"
           >
             Password
           </FormInput>

@@ -20,6 +20,7 @@
   -moz-transition: .3s linear;
   transition: .3s linear;
   box-shadow: inset 0 0 0 0 #000;
+  opacity: 0.4;
 }
 
 .button:hover {

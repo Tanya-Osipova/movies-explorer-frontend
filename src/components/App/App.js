@@ -154,7 +154,15 @@ function App() {
     api.saveCard(savedCard).then((newCard) => {
       //dispatchMovies({type: 'SAVE_MOVIE'})
       //TODO SAVE LOCAL STORAGE
-      setSavedMovies(savedMovies.concat(newCard))
+      setSavedMovies(savedMovies.concat(newCard.data))
+    })
+    .catch(err => console.log(err))
+  }
+
+  function handleDeleteCard(card) {
+     api.deleteCard(card._id).then((newCard) => {
+      console.log(newCard._id)
+      setSavedMovies(savedMovies.filter(mov => mov._id !== newCard._id))
     })
     .catch(err => console.log(err))
   }
@@ -176,6 +184,7 @@ function App() {
             path='/saved-movies'
             loggedIn={loggedIn}
             movies={movies}
+            onDeleteCard={handleDeleteCard}
             onLoad={dispatchMovies}
             component={SavedMovies}
           />

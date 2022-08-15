@@ -3,15 +3,14 @@ import { Link } from 'react-router-dom';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState';
 import './MoviesCard.css'
 
-function MoviesCard({ card, onSaveCard, ...props }) {
-  const [savedMovies,setSavedMovies] = useSemiPersistentState('savedMovies',[])
+function MoviesCard({ card, onClick, ...props }) {
+  const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[])
 //useeffect?
 // LEFT side checks all movies, right is true for saved-movies
   const isSaved = savedMovies.some(movie => movie.movieId === card.id ) || card.movieId // only saved cards have movieId
 
-
-  const handleSaveCard = (savedCard) => {
-    onSaveCard(savedCard)
+  const handleClick = (savedCard) => {
+    onClick(savedCard)
   };
 
   return (
@@ -24,7 +23,7 @@ function MoviesCard({ card, onSaveCard, ...props }) {
         <button 
           className={`movies-card__save-button${isSaved ? props.icon : ""}`}
           type='button'
-          onClick={() => handleSaveCard(card)}
+          onClick={() => handleClick(card)}
         >
         </button>
       </div>

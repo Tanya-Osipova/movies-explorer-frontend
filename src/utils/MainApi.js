@@ -23,6 +23,7 @@ export default class Api {
       headers: this._headers,
       credentials: 'include',
     })
+
     return this._makeRequest(promise);
   }
 
@@ -37,6 +38,7 @@ export default class Api {
         email,
       })
     });
+
     return this._makeRequest(promise);
   }
 
@@ -47,6 +49,7 @@ export default class Api {
       credentials: 'include',
 
     })
+
     return this._makeRequest(promise);
   }
 
@@ -56,6 +59,7 @@ export default class Api {
       headers: this._headers,
       credentials: 'include',
     })
+
     return this._makeRequest(promise);
   }
 
@@ -67,6 +71,17 @@ export default class Api {
       body: JSON.stringify(card),
     })
     
+    return this._makeRequest(promise);
+  }
+
+  // Delete 
+  deleteCard(moviesId) {
+    const promise = fetch(`${this._url}/movies/${moviesId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+      credentials: 'include',
+    });
+  
     return this._makeRequest(promise);
   }
 }

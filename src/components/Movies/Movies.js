@@ -22,7 +22,11 @@ function Movies(props) {
       {props.movies.isLoading ? (
         <Preloader />
       ) : (
-        <MoviesCardList list={props.list} onSaveCard={props.onSaveCard} icon={` movies-card__save-button_active`}/>
+        <MoviesCardList 
+          list={props.list} 
+          onClick={props.onSaveCard} 
+          icon={` movies-card__save-button_active`}
+        />
       )}
       <Footer />
     </>
