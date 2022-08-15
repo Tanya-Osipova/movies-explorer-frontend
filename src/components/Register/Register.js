@@ -73,33 +73,37 @@ class Register extends React.Component {
         >
           {/* USERNAME */}
           <FormInput 
-            type='text'
+            props={{ type: "text", minLength: "2", maxLength: "30", required: true }}
             id='username'
             name='username'
             value={this.state.username}
             onChange={this.handleChange}
+            validators={["valueMissing", "tooShort", "tooLong"]}
+            errorMessage="Username is required! Username must be between 2 and 30 characters!"
           >
             Username
           </FormInput>
           {/* EMAIL */}
           <FormInput
-            type='email'
+            props={{ type: "email", required: true }}
             id='email'
             name='email'
             value={this.state.email} 
             onChange={this.handleChange}
-            required
+            validators={["typeMismatch", "valueMissing"]}
+            errorMessage="Email is required! Please enter a valid email!"
           >
             Email
           </FormInput>
           {/* PASSWORD */}
           <FormInput 
-            type='password'
+            props={{ type: "password", minLength: "8", required: true }}
             id='password'
             name='password'
             value={this.state.password} 
             onChange={this.handleChange}
-            required
+            validators={["tooShort", "valueMissing"]}
+            errorMessage="Password is required! Password must be at least 8 characters"
           >
             Password
           </FormInput>

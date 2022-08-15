@@ -71,7 +71,6 @@ class Login extends React.Component {
         >
           {/* EMAIL */}
           <FormInput
-            // type='email'
             props={{ type: "email", required: true }}
             id='email'
             name='email'
@@ -84,7 +83,6 @@ class Login extends React.Component {
           </FormInput>
           {/* PASSWORD */}
           <FormInput 
-            // type='password'
             props={{ type: "password", minLength: "8", required: true }}
             id='password'
             name='password'

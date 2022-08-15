@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Form = ({ onSubmit, children }) => (
-  <form onSubmit={onSubmit}>
+  <form onSubmit={onSubmit} noValidate>
     {children}
   </form>
 );

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './FormInput.css';
 
-const FormInput = ({validators, errorMessage, id, name, children, value, onChange,...props }) => {
+const FormInput = ({ id, name, children, value, onChange, validators, errorMessage, props }) => {
   const [isValid, setIsValid] = useState(true);
 
   const checkValidity = e => {
@@ -16,7 +16,6 @@ const FormInput = ({validators, errorMessage, id, name, children, value, onChang
         {children}
         <input
           className='form__input'
-          // type={type}
           id={id}
           name={name}
           value={value}

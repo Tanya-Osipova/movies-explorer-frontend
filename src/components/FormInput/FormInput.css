@@ -56,9 +56,9 @@
   line-height: 12px;
   color: #EE3465;
   margin-top: 6px;
-  visibility: visible;
+  display: block;
 }  
 
 .form__error-message_hide {
-  visibility: hidden;
+  display: none;
 }

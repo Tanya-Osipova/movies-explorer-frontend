@@ -3,7 +3,6 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import FormContainer from '../FormContainer/FormContainer';
 import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
-import InputWithValidator from '../InputWithValidator/InputWithValidator';
 
 function ProfileUpdate(props) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -38,21 +37,25 @@ function ProfileUpdate(props) {
       link=''
       onSubmit={handleSubmit} 
     >
-      <FormInput
-        type='text'
+      <FormInput 
+        props={{ type: "text", minLength: "2", maxLength: "30", required: true }}
         id='username'
         name='username'
         value={name || ''} 
         onChange={handleName}
+        validators={["valueMissing", "tooShort", "tooLong"]}
+        errorMessage="Username is required! Username must be between 2 and 30 characters!"
       >
         Name
       </FormInput>
       <FormInput 
-        type='email'
+        props={{ type: "email", required: true }}
         id='email'
         name='email'
         value={email || ''} 
         onChange={handleEmail}
+        validators={["typeMismatch", "valueMissing"]}
+        errorMessage="Email is required! Please enter a valid email!"
       >
         Email
       </FormInput>
