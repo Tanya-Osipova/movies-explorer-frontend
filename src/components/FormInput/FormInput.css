@@ -32,18 +32,10 @@
   margin-bottom: 0;
 }
 
-/* .form__input:focus {
+.form__input:focus {
   border-bottom: 1px solid #2BE080;
-} */
-
-/* ERROR */
-.form__input_valid {
-  border-bottom: 1px solid #2BE080;
-}
-
-.form__input_invalid {
-  border-bottom: 1px solid #EE3465;;
 } 
+/* ERROR */
 
 .form__error-message {
   width: 100%;
@@ -56,9 +48,4 @@
   line-height: 12px;
   color: #EE3465;
   margin-top: 6px;
-  display: block;
 }  
-
-.form__error-message_hide {
-  display: none;
-}

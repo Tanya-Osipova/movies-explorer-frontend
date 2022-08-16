@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import InputWithValidator from '../InputWithValidator/InputWithValidator';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
