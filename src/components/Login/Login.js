@@ -6,150 +6,34 @@ import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
 import Logo from '../Logo/Logo';
 import PopupMessage from '../PopupMessage/PopupMessage.js';
-//import useInput from '../../hooks/useInput.js';
+import useInput from '../../hooks/useInput.js';
+import '../FormInput/FormInput.css';
 import './Login.css';
 
-/*
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      popup: false,
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  
-  handleChange(e) {
-    const {name, value} = e.target;
-    this.setState({
-      [name]: value 
-    });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault()
-    if (!this.state.email || !this.state.password) {
-      return;
-    }
-    userAuth.authorize(this.state.email, this.state.password)
-    .then((data) => {
-      if (data) {
-        this.setState({
-          email: '', 
-          password: ''
-        }, () => {
-          this.props.handleLogin(e);
-          this.props.history.push('/movies');
-        })
-      } else {
-        this.setState({
-          message: 'Error'
-        }, () => {
-          this.setState({ popup : true });
-          const timer = setTimeout(() => {
-          this.setState({ popup : false });
-          }, 3000);
-          return () => clearTimeout(timer)
-        })
-      }
-    })
-    .catch(err => console.log(err))
-  }
-
-  render() {
-    return (
-      <div className='login'>
-        <Logo />
-        <FormContainer
-          title='Nice to see you!'
-          question='Not a member yet?'
-          link='signup'
-          linkName='Sign up'
-          onSubmit={this.handleSubmit}
-        >
-         
-          <FormInput
-            type= "email"
-            id='email'
-            name='email'
-            value={this.state.email} 
-            onChange={this.handleChange}
-          >
-            Email
-          </FormInput>
-          
-          <FormInput 
-            type= "password"
-            id='password'
-            name='password'
-            value={this.state.password} 
-            onChange={this.handleChange}
-          >
-            Password
-          </FormInput>
-          
-          <Button type="submit" className="button">
-            Login
-          </Button>
-        </FormContainer>
-        
-        <PopupMessage 
-          message={this.state.message}
-          isOpen={this.state.popup}
-        />
-      </div>
-    );
-  } 
-};
-*/
 function Login(props) {
+  const email = useInput('', {isEmpty: true, isEmail: true})
+  const password = useInput('', {isEmpty: true, minLength: 8})
   const [message, setMessage] = useState('')
   const [popupActive, setPopupActive] = useState(false)
   const history = useHistory();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
 
   useEffect(() => {
     if (!message) return
     setPopupActive(true)
     const timer = setTimeout(() => {
       setPopupActive(false)
+      setMessage('')
     }, 3000);
     return () => clearTimeout(timer) 
-  }, [])
+  }, [message])
   
-  // HANDLE CHANGE
-  function handleChange(e) {
-    const {name, value} = e.target
-
-    setFormData(prevFormData => {
-      return {
-        ...prevFormData,
-        [name]: value
-      }
-    })
-  }
-
   // HANDLE SUBMIT
   function handleSubmit(e) {
     e.preventDefault()
-
-    if (!formData.email || !formData.password) {
-      return;
-    }
-  
-    userAuth.authorize(formData.email, formData.password)
+   
+    userAuth.authorize(email.value, password.value)
       .then((data) => {
         if (data) {
-          setFormData({
-            email: '',
-            password: ''
-          })
           props.handleLogin(e)
           history.push('/movies')
         } else {
@@ -173,25 +57,35 @@ function Login(props) {
           type= "email"
           id='email'
           name='email'
-          value={formData.email} 
-          onChange={handleChange}
+          value={email.value} 
+          onChange={e => email.onChange(e)}
+          onBlur={e => email.onBlur(e)}
         >
           Email
         </FormInput>
+        {(email.isError && email.isEmpty) && <p className='form__error-message'>Email is required!</p>}
+        {(email.isError && email.emailError) && <p className='form__error-message'>Please enter a valid email!</p>}
         
         {/* PASSWORD */}
         <FormInput 
           type= "password"
           id='password'
           name='password'
-          value={formData.password} 
-          onChange={handleChange}
+          value={password.value} 
+          onChange={e => password.onChange(e)}
+          onBlur={e => password.onBlur(e)}
         >
           Password
         </FormInput>
-        
+        {(password.isError && password.isEmpty) && <p className='form__error-message'>Password is required!</p>}
+        {(password.isError && password.minLengthError) && <p className='form__error-message'>Password must be at least 8 characters</p>}
+
         {/* BUTTON */}
-        <Button type="submit" className="button">
+        <Button 
+          type="submit" 
+          className="button"
+          disabled={!email.inputValid || !password.inputValid} 
+        >
           Login
         </Button>
       </FormContainer>
