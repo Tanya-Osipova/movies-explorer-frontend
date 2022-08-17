@@ -1,125 +1,125 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom'; 
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as userAuth from '../../utils/userAuth.js';
 import FormContainer from '../FormContainer/FormContainer';
 import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
 import Logo from '../Logo/Logo';
 import PopupMessage from '../PopupMessage/PopupMessage.js';
+import useInput from '../../hooks/useInput.js';
+import '../FormInput/FormInput.css';
 import './Register.css';
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      email: '',
-      password: '',
-      popup: false
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+function Register(props) {
+  const currentUser = React.useContext(CurrentUserContext);
+  const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30} )
+  const email = useInput('', {isEmpty: true, isEmail: true})
+  const password = useInput('', {isEmpty: true, minLength: 8})
+  const [message, setMessage] = useState('')
+  const [popupActive, setPopupActive] = useState(false)
+  const history = useHistory();
 
-  }
-  // HANDLE CHANGE
-  handleChange(e) {
-    const {name, value} = e.target;
-    this.setState({
-      [name]: value
-    });
-  }
-  // HANDLE SUBMIT
-  handleSubmit(e) {
-    e.preventDefault()
-    if (this.state.password) {
-      const { username, email, password } = this.state;
-      userAuth.register(username, email, password).then((res) => {
-        if(res) {
-          this.setState({
-            message: 'Success'
-          }, () => {
-              this.setState({ popup : true });
-              const timer = setTimeout(() => {
-              this.setState({ popup : false });
-              this.props.history.push('/signin')
-            }, 3000)
-            return () => clearTimeout(timer)
-          })
-        } else {
-          this.setState({
-            message: 'Error'
-          }, () => {
-            this.setState({ popup : true });
-            const timer = setTimeout(() => {
-            this.setState({ popup : false });
-            }, 3000);
-            return () => clearTimeout(timer)
-          })
-        }
-      })
-    }
-  }
+  useEffect(() => {
+    if (!message) return
+    setPopupActive(true)
+    const timer = setTimeout(() => {
+      setPopupActive(false)
+      setMessage('')
+    }, 3000);
+    return () => clearTimeout(timer) 
+  }, [message])
   
-  render() {
-    return (
-      <div className='register'>
-        <Logo />
-        <FormContainer
-          title='Welcome!'
-          question='Already have an account?'
-          link='signin'
-          linkName='Login'
-          onSubmit={this.handleSubmit}
-        >
-          {/* USERNAME */}
-          <FormInput 
-            props={{ type: "text", minLength: "2", maxLength: "30", required: true }}
-            id='username'
-            name='username'
-            value={this.state.username}
-            onChange={this.handleChange}
-            validators={["valueMissing", "tooShort", "tooLong"]}
-            errorMessage="Username is required! Username must be between 2 and 30 characters!"
-          >
-            Username
-          </FormInput>
-          {/* EMAIL */}
-          <FormInput
-            props={{ type: "email", required: true }}
-            id='email'
-            name='email'
-            value={this.state.email} 
-            onChange={this.handleChange}
-            validators={["typeMismatch", "valueMissing"]}
-            errorMessage="Email is required! Please enter a valid email!"
-          >
-            Email
-          </FormInput>
-          {/* PASSWORD */}
-          <FormInput 
-            props={{ type: "password", minLength: "8", required: true }}
-            id='password'
-            name='password'
-            value={this.state.password} 
-            onChange={this.handleChange}
-            validators={["tooShort", "valueMissing"]}
-            errorMessage="Password is required! Password must be at least 8 characters"
-          >
-            Password
-          </FormInput>
-          {/* BUTTON */}
-          <Button type="submit" className="button">
-            Sign up
-          </Button>
-        </FormContainer>
-        {/* MESSAGE POPUP */}
-        <PopupMessage 
-          message={this.state.message}
-          isOpen={this.state.popup}
-        />
-      </div>
-    )
-  }
-};
+  // HANDLE SUBMIT
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (password.value) {
+      userAuth.register(name.value, email.value, password.value)
+        .then((data) => {
+          if (data) {
+            console.log(data)
+            currentUser.name = data.name
+            currentUser.email = data.email
+            setMessage('Success')
+            setTimeout(() => history.push('/movies'),3000);
+          } else {
+            setMessage('Error')
+          }})
+          .catch(err => setMessage(err.message))
+    } 
+  } 
 
-export default withRouter(Register); 
+  return (
+    <div className='register'>
+      <Logo />
+      <FormContainer
+        title='Welcome!'
+        question='Already have an account?'
+        link='signin'
+        linkName='Login'
+        onSubmit={handleSubmit}
+      >
+        {/* USERNAME */}
+        <FormInput 
+          type='text'
+          id='username'
+          name='username'
+          value={name.value} 
+          onChange={e => name.onChange(e)}
+          onBlur={e => name.onBlur(e)}  
+        >
+          Username
+        </FormInput>
+        {(name.isError && name.isEmpty) && <p className='form__error-message'>Username is required!</p>}
+        {(name.isError && (name.minLengthError || name.maxLengthError)) && <p className='form__error-message'>Username must be between 2 and 30 characters!</p>}
+        
+        {/* EMAIL */}
+        <FormInput
+          type= "email"
+          id='email'
+          name='email'
+          value={email.value} 
+          onChange={e => email.onChange(e)}
+          onBlur={e => email.onBlur(e)}
+        >
+          Email
+        </FormInput>
+        {(email.isError && email.isEmpty) && <p className='form__error-message'>Email is required!</p>}
+        {(email.isError && email.emailError) && <p className='form__error-message'>Please enter a valid email!</p>}
+
+        {/* PASSWORD */}
+        <FormInput 
+          type= "password"
+          id='password'
+          name='password'
+          value={password.value} 
+          onChange={e => password.onChange(e)}
+          onBlur={e => password.onBlur(e)}
+        >
+          Password
+        </FormInput>
+        {(password.isError && password.isEmpty) && <p className='form__error-message'>Password is required!</p>}
+        {(password.isError && password.minLengthError) && <p className='form__error-message'>Password must be at least 8 characters</p>}
+
+        {/* BUTTON */}
+        <Button 
+          type="submit" 
+          className="button"
+          disabled={!email.inputValid || !password.inputValid} 
+        >
+          Sign up
+        </Button>
+      </FormContainer>
+      
+      {/* POPUP MESSAGE */}
+      <PopupMessage 
+        message={message}
+        popupActive={popupActive}
+        setPopupActive={setPopupActive}
+      />
+    </div>
+  )
+  
+}
+
+export default Register; 

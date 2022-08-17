@@ -97,6 +97,7 @@ function App() {
   function handleLogin(e) {
     e.preventDefault();
     setLoggedIn(true);
+    
   }
 
   // GET USER INFO
@@ -205,7 +206,7 @@ function App() {
             />
           </Route>
           <Route path='/signup'>
-            <Register />
+            <Register handleLogin={handleLogin}/>
           </Route> 
           <Route path='*'>
             <PageNotFound />

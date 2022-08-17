@@ -7,7 +7,7 @@ import '../FormInput/FormInput.css';
 
 function ProfileUpdate(props) {
   const email = useInput('', {isEmpty: true, isEmail: true})
-  const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30} )
+  const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30})
   const [message, setMessage] = React.useState('')
 
   function handleSubmit(e) {
@@ -27,7 +27,7 @@ function ProfileUpdate(props) {
 
   //MESSAGE SUCCESSFUL CHANGE OF NAME
   useEffect(() => {
-    setMessage('Updated successfully')
+    setMessage(<p className='form__update-message'>Updated successfully!</p>)
     const timer = setTimeout(() => {
       props.setActive(false)
       setMessage('')
@@ -68,8 +68,8 @@ function ProfileUpdate(props) {
       </FormInput> 
       {(email.isError && email.isEmpty) && <p className='form__error-message'>Email is required!</p>}
       {(email.isError && email.emailError) && <p className='form__error-message'>Please enter a valid email!</p>}
-        {message}
 
+      {message}
       {/* BUTTON */}
       <Button 
         type='submit' 
