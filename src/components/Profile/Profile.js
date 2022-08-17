@@ -41,7 +41,7 @@ function Profile(props) {
       <div className="profile">
         <div className="profile__container">
           <h3 className="profile__title">
-            Hi, Username!
+            Hi, {currentUser.name}!
           </h3>
           <div className="profile__info">
             <div className="profile__user">
@@ -76,7 +76,9 @@ function Profile(props) {
       >
         <ProfileUpdate 
           onUpdateUser={props.onUpdateUser}
+          active={popupActive}
           setActive={setPopupActive}
+          user={currentUser}
         />
       </Popup>
     </>

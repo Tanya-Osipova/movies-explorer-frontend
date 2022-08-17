@@ -59,9 +59,10 @@ function App() {
   useEffect(() => {
     // Check cookie on reload
     if (localStorage.getItem('loggedIn')){
+      console.log(localStorage.getItem('loggedIn'))
       setLoggedIn(localStorage.getItem('loggedIn'))//set status to saved in local storage
     }
-    api.getMovies().then((movies) => setSavedMovies(movies.data))
+    //api.getMovies().then((movies) => setSavedMovies(movies.data)).catch(err => console.log(err))
     checkCookie()
   },[])
 
@@ -199,7 +200,8 @@ function App() {
           </Route>  
           <Route path='/signin'>
             <Login 
-              handleLogin={handleLogin} 
+              handleLogin={handleLogin}
+              loggedIn={loggedIn}
             />
           </Route>
           <Route path='/signup'>

@@ -3,12 +3,7 @@ import successIcon from '../../images/icons/success.svg';
 import errorIcon from '../../images/icons/error.svg';
 import Popup from '../Popup/Popup';
 
-const PopupMessage = (props) => {
-  const [popupActive, setPopupActive] = useState(false);
-
-  useEffect(() => {
-    setPopupActive(props.isOpen)
-  })
+const PopupMessage = ({popupActive, setPopupActive, ...props}) => {
 
   useEffect(() => {
    document.addEventListener("keydown", handleEscapeKey);

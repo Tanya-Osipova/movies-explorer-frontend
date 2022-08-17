@@ -1,15 +1,15 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import * as userAuth from '../../utils/userAuth.js';
 import FormContainer from '../FormContainer/FormContainer';
 import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
 import Logo from '../Logo/Logo';
 import PopupMessage from '../PopupMessage/PopupMessage.js';
-//import useValidation from '../../hooks/useValidation.js';
 //import useInput from '../../hooks/useInput.js';
 import './Login.css';
 
+/*
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,7 @@ class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  // HANDLE CHANGE
+  
   handleChange(e) {
     const {name, value} = e.target;
     this.setState({
@@ -29,7 +29,6 @@ class Login extends React.Component {
     });
   }
 
-  // HANDLE SUBMIT
   handleSubmit(e) {
     e.preventDefault()
     if (!this.state.email || !this.state.password) {
@@ -71,36 +70,32 @@ class Login extends React.Component {
           linkName='Sign up'
           onSubmit={this.handleSubmit}
         >
-          {/* EMAIL */}
+         
           <FormInput
-            props={{ type: "email", required: true }}
+            type= "email"
             id='email'
             name='email'
             value={this.state.email} 
             onChange={this.handleChange}
-            validators={["typeMismatch", "valueMissing"]}
-            errorMessage="Email is required! Please enter a valid email!"
           >
             Email
           </FormInput>
-          {/* PASSWORD */}
+          
           <FormInput 
-            props={{ type: "password", minLength: "8", required: true }}
+            type= "password"
             id='password'
             name='password'
             value={this.state.password} 
             onChange={this.handleChange}
-            validators={["tooShort", "valueMissing"]}
-            errorMessage="Password is required! Password must be at least 8 characters"
           >
             Password
           </FormInput>
-          {/* BUTTON */}
+          
           <Button type="submit" className="button">
             Login
           </Button>
         </FormContainer>
-        {/* MESSAGE POPUP */}
+        
         <PopupMessage 
           message={this.state.message}
           isOpen={this.state.popup}
@@ -109,5 +104,106 @@ class Login extends React.Component {
     );
   } 
 };
+*/
+function Login(props) {
+  const [message, setMessage] = useState('')
+  const [popupActive, setPopupActive] = useState(false)
+  const history = useHistory();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
 
-export default withRouter(Login);
+  useEffect(() => {
+    if (!message) return
+    setPopupActive(true)
+    const timer = setTimeout(() => {
+      setPopupActive(false)
+    }, 3000);
+    return () => clearTimeout(timer) 
+  }, [])
+  
+  // HANDLE CHANGE
+  function handleChange(e) {
+    const {name, value} = e.target
+
+    setFormData(prevFormData => {
+      return {
+        ...prevFormData,
+        [name]: value
+      }
+    })
+  }
+
+  // HANDLE SUBMIT
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    if (!formData.email || !formData.password) {
+      return;
+    }
+  
+    userAuth.authorize(formData.email, formData.password)
+      .then((data) => {
+        if (data) {
+          setFormData({
+            email: '',
+            password: ''
+          })
+          props.handleLogin(e)
+          history.push('/movies')
+        } else {
+          setMessage('Error')
+        }})
+        .catch(err => setMessage(err.message))
+  } 
+
+  return (
+    <div className='login'>
+      <Logo />
+      <FormContainer
+        title='Nice to see you!'
+        question='Not a member yet?'
+        link='signup'
+        linkName='Sign up'
+        onSubmit={handleSubmit}
+      >
+        {/* EAMIL */}
+        <FormInput
+          type= "email"
+          id='email'
+          name='email'
+          value={formData.email} 
+          onChange={handleChange}
+        >
+          Email
+        </FormInput>
+        
+        {/* PASSWORD */}
+        <FormInput 
+          type= "password"
+          id='password'
+          name='password'
+          value={formData.password} 
+          onChange={handleChange}
+        >
+          Password
+        </FormInput>
+        
+        {/* BUTTON */}
+        <Button type="submit" className="button">
+          Login
+        </Button>
+      </FormContainer>
+        
+      {/* POPUP MESSAGE */}
+      <PopupMessage 
+        message={message}
+        popupActive={popupActive}
+        setPopupActive={setPopupActive}
+      />
+    </div>
+  )
+}
+
+export default Login;
