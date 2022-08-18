@@ -13,7 +13,7 @@ import './Register.css';
 
 function Register(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30} )
+  const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30})
   const email = useInput('', {isEmpty: true, isEmail: true})
   const password = useInput('', {isEmpty: true, minLength: 8})
   const [message, setMessage] = useState('')
@@ -37,7 +37,6 @@ function Register(props) {
       userAuth.register(name.value, email.value, password.value)
         .then((data) => {
           if (data) {
-            console.log(data)
             currentUser.name = data.name
             currentUser.email = data.email
             setMessage('Success')
@@ -105,7 +104,7 @@ function Register(props) {
         <Button 
           type="submit" 
           className="button"
-          disabled={!email.inputValid || !password.inputValid} 
+          disabled={!name.inputValid || !email.inputValid || !password.inputValid} 
         >
           Sign up
         </Button>

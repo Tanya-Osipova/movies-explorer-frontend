@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import * as userAuth from '../../utils/userAuth.js';
 import FormContainer from '../FormContainer/FormContainer';
 import FormInput from '../FormInput/FormInput';
@@ -12,7 +11,6 @@ import '../FormInput/FormInput.css';
 import './Login.css';
 
 function Login(props) {
-  const currentUser = React.useContext(CurrentUserContext);
   const email = useInput('', {isEmpty: true, isEmail: true})
   const password = useInput('', {isEmpty: true, minLength: 8})
   const [message, setMessage] = useState('')
@@ -36,9 +34,6 @@ function Login(props) {
     userAuth.authorize(email.value, password.value)
       .then((data) => {
         if (data) {
-          console.log(data)
-          currentUser.name = data.name;
-          currentUser.email = data.email;
           props.handleLogin(e)
           history.push('/movies')
         } else {

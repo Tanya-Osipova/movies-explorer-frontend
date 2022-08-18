@@ -11,13 +11,13 @@ function Main() {
   return (
     <>
       <Header />
-      <main>
+      
       <Promo />
       <AboutProject />
       <Techs />
       <AboutMe />
       <Portfolio />
-      </main>
+      
       <Footer />
     </>
   );

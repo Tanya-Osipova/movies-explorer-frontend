@@ -47,7 +47,6 @@ export default class Api {
     const promise = fetch(`${this._url}/signout`, {
       headers: this._headers,
       credentials: 'include',
-
     })
 
     return this._makeRequest(promise);

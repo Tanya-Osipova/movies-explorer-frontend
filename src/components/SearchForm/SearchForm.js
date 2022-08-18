@@ -1,11 +1,11 @@
 import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
-import InputWithValidator from '../InputWithValidator/InputWithValidator';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
 
 import './SearchForm.css';
 
-function SearchForm({ onSearchSubmit }) {
+function SearchForm({ onSearchSubmit,...props }) {
+  //const name = useInput('', {isEmpty: true})
   const [checked, setChecked] = useSemiPersistentState('searchOption',false);
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
 
@@ -19,19 +19,18 @@ function SearchForm({ onSearchSubmit }) {
   
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+    console.log(checked)
     onSearchSubmit(searchTerm, checked)
   }
 
   return (
     <form className="search-form" onSubmit={handleSearchSubmit}>
-      <InputWithValidator
+      <input
         className="search-form__input"
-        props={{ type: "text", required: true }}
+        type= "text"
         id="search"
         name="search"
         placeholder="Search.."
-        checks={["valueMissing"]}
-        errorMessage="You need to enter a keyword!"
         value={searchTerm}
         onChange={handleSearchInput}
       />

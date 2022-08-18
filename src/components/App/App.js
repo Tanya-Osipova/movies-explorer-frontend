@@ -21,6 +21,7 @@ function App() {
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
   const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
+  const [filteredMovies,setFilteredMovies] = useState([])
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
 
 
@@ -59,10 +60,8 @@ function App() {
   useEffect(() => {
     // Check cookie on reload
     if (localStorage.getItem('loggedIn')){
-      console.log(localStorage.getItem('loggedIn'))
       setLoggedIn(localStorage.getItem('loggedIn'))//set status to saved in local storage
     }
-    //api.getMovies().then((movies) => setSavedMovies(movies.data)).catch(err => console.log(err))
     checkCookie()
   },[])
 
@@ -80,31 +79,36 @@ function App() {
   }, [loggedIn]);
 
   // FILTER MOVIES
-  const searchedMovies = movies.data.filter((movie) => {
-    if (movie.nameEN) {
-      return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
-    }
-    return false
-  })
-  .filter((movie) => {
-    if (movie.duration >= 40 && searchTermOption){
-      return false
-    }
-    return movie
-  });
+  useEffect(() => {
+    setFilteredMovies(
+      movies.data
+      .filter((movie) => {
+        if (movie.nameEN) {
+          return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
+        }
+        return false
+      })
+      .filter((movie) => {
+        if (movie.duration >= 40 && searchTermOption){
+          return false
+        }
+        return movie
+      })
+    )
+  }, [movies.data, searchTermOption])
+
 
   // LOGIN
   function handleLogin(e) {
     e.preventDefault();
-    setLoggedIn(true);
-    
+    checkCookie();
   }
 
   // GET USER INFO
   function checkCookie() {
     api.getUserInfo().then((res) => {
       setLoggedIn(true)
-      setCurrentUser(res)
+      setCurrentUser(res.data)
       localStorage.setItem('loggedIn', true)
     })
     .catch(err => {
@@ -131,7 +135,6 @@ function App() {
           type: 'MOVIES_FETCH_SUCCESS',
           payload: result,
         });
-        console.log(searchedMovies);
       })
       .catch(() =>
         dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
@@ -139,32 +142,49 @@ function App() {
   }
 
   function handleSaveCard(card) {
-    const savedCard = {
-      country: card.country,
-      director: card.director,
-      duration: card.duration,
-      year: card.year,
-      description: card.description,
-      image: `https://api.nomoreparties.co/${card.image.url}`,
-      trailerLink: card.trailerLink,
-      thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
-      nameEN: card.nameEN,
-      nameRU: card.nameRU,
-      movieId: card.id
+    if (savedMovies.some(movie => movie.movieId === card.id ) || card.movieId) {
+      //DELETE saved card
+      handleDeleteCard(card)
+    } else {
+      console.log(card)
+      const savedCard = {
+        country: card.country,
+        director: card.director,
+        duration: card.duration,
+        year: card.year,
+        description: card.description,
+        image: `https://api.nomoreparties.co/${card.image.url}`,
+        trailerLink: card.trailerLink,
+        thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
+        nameEN: card.nameEN,
+        nameRU: card.nameRU,
+        movieId: card.id
+      }
+      api.saveCard(savedCard).then((newCard) => {
+        //dispatchMovies({type: 'SAVE_MOVIE'})
+        //TODO SAVE LOCAL STORAGE
+        console.log(newCard)
+        setSavedMovies(savedMovies.concat(newCard.data))
+      })
+      .catch(err => console.log(err))
     }
-    
-    api.saveCard(savedCard).then((newCard) => {
-      //dispatchMovies({type: 'SAVE_MOVIE'})
-      //TODO SAVE LOCAL STORAGE
-      setSavedMovies(savedMovies.concat(newCard.data))
-    })
-    .catch(err => console.log(err))
   }
 
   function handleDeleteCard(card) {
-     api.deleteCard(card._id).then((newCard) => {
-      console.log(newCard._id)
-      setSavedMovies(savedMovies.filter(mov => mov._id !== newCard._id))
+
+    let cardId;
+    //Movies page
+    if (card.id) {
+      cardId = savedMovies.find(mov => mov.movieId === card.id)._id
+
+    } else {
+      //Saved movies
+      cardId = card._id
+    }
+
+     api.deleteCard(cardId).then(() => {
+      console.log(savedMovies)
+      setSavedMovies(savedMovies.filter(mov => mov._id !== cardId.toString()))
     })
     .catch(err => console.log(err))
   }
@@ -177,7 +197,7 @@ function App() {
             path='/movies'
             loggedIn={loggedIn}
             movies={movies}
-            list={searchedMovies}
+            list={filteredMovies}
             onSearchSubmit={handleSearch}
             onSaveCard={handleSaveCard}
             component={Movies}
@@ -185,7 +205,7 @@ function App() {
           <ProtectedRoute 
             path='/saved-movies'
             loggedIn={loggedIn}
-            movies={movies}
+            movies={savedMovies}
             onDeleteCard={handleDeleteCard}
             onLoad={dispatchMovies}
             component={SavedMovies}

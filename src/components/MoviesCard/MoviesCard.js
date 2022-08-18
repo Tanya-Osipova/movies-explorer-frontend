@@ -1,16 +1,22 @@
 import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState';
 import './MoviesCard.css'
 
 function MoviesCard({ card, onClick, ...props }) {
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[])
+  const [isSaved, setIsSaved] = useState(false)
 //useeffect?
 // LEFT side checks all movies, right is true for saved-movies
-  const isSaved = savedMovies.some(movie => movie.movieId === card.id ) || card.movieId // only saved cards have movieId
+ 
+  useEffect(() => {
+    setIsSaved(savedMovies.some(movie => movie.movieId === card.id ) || card.movieId) // only saved cards have movieId
+  },[])
 
   const handleClick = (savedCard) => {
     onClick(savedCard)
+    setIsSaved(!isSaved)
   };
 
   return (

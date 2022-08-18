@@ -8,10 +8,12 @@ import '../FormInput/FormInput.css';
 function ProfileUpdate(props) {
   const email = useInput('', {isEmpty: true, isEmail: true})
   const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30})
+  const [sameData,setSameData] = React.useState(true)
   const [message, setMessage] = React.useState('')
 
   function handleSubmit(e) {
     e.preventDefault();
+    setSameData(true)
     props.onUpdateUser({
       email: email.value,
       name: name.value,
@@ -24,8 +26,6 @@ function ProfileUpdate(props) {
     name.updateValue(props.user.name);
   }, [props.active]);
 
-
-  //MESSAGE SUCCESSFUL CHANGE OF NAME
   useEffect(() => {
     setMessage(<p className='form__update-message'>Updated successfully!</p>)
     const timer = setTimeout(() => {
@@ -34,6 +34,15 @@ function ProfileUpdate(props) {
     }, 3000);
     return () => clearTimeout(timer)
   }, [props.user.name]);
+
+  //Lock button
+  useEffect(() => {
+    if (name.value === props.user.name && email.value === props.user.email) {
+      setSameData(true)
+    } else {
+      setSameData(false)
+    }
+  }, [email.value, name.value])
 
   return (
     <FormContainer
@@ -74,7 +83,7 @@ function ProfileUpdate(props) {
       <Button 
         type='submit' 
         className="button" 
-        disabled={!email.inputValid || !name.inputValid} 
+        disabled={!email.inputValid || !name.inputValid || sameData} 
       >
         Update
       </Button>
