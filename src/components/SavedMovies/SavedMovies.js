@@ -4,12 +4,15 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
-import useSemiPersistentState from '../../hooks/useSemiPersistentState';
+import { useEffect } from 'react';
 
 
 function SavedMovies(props) {
-  const [listSavedMovies, setListSavedMovies] = useSemiPersistentState('savedMovies',[]);
+  // useEffect(() => {
+  //   props.onSearchSubmit(props.SavedMovies)//update filtered cards on page load
+  // },[])
 
+  
   return (
     <>
       <NavigationAuth />
@@ -27,7 +30,7 @@ function SavedMovies(props) {
         <Preloader />
       ) : (
         <MoviesCardList 
-          list={listSavedMovies} 
+          list={props.movies || []} 
           onClick={props.onDeleteCard} 
           icon={` movies-card__save-button_delete`}
         />

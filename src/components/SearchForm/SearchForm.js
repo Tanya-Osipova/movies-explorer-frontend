@@ -1,11 +1,12 @@
 import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
+import useInput from '../../hooks/useInput';
 
 import './SearchForm.css';
 
 function SearchForm({ onSearchSubmit,...props }) {
-  //const name = useInput('', {isEmpty: true})
+  const name = useInput('', {isEmpty: true})
   const [checked, setChecked] = useSemiPersistentState('searchOption',false);
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
 
@@ -15,12 +16,17 @@ function SearchForm({ onSearchSubmit,...props }) {
 
   const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
+    name.onChange(event)
   };
   
   const handleSearchSubmit = (e) => {
+    name.onBlur(e)
+    console.log(name)
     e.preventDefault();
-    console.log(checked)
-    onSearchSubmit(searchTerm, checked)
+    if (name.inputValid) {
+      onSearchSubmit(searchTerm, checked)
+    } 
+    name.isError = true
   }
 
   return (
@@ -34,10 +40,11 @@ function SearchForm({ onSearchSubmit,...props }) {
         value={searchTerm}
         onChange={handleSearchInput}
       />
+      {(name.isError && name.isEmpty) && <p className='form__error-message'>Search keyword is required!</p>}
+
       <button 
         className="search-form__button" 
         type="submit" 
-        disabled={!searchTerm}
       >
       </button>
       <FilterCheckbox 

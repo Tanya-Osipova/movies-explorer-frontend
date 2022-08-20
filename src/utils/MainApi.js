@@ -14,7 +14,7 @@ export default class Api {
     }).then((obj) => {
       return obj;
     })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log('error'))
   }
   
   // Get User Info

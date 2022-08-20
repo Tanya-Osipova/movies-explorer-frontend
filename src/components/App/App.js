@@ -16,13 +16,14 @@ import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
 import './App.css';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
   const [currentUser, setCurrentUser] = useState({});
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
   const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
   const [filteredMovies,setFilteredMovies] = useState([])
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
+  const [loggedIn, setLoggedIn] = useSemiPersistentState('loggedIn',false);
+
 
 
   const moviesReducer = (state, action) => {
@@ -58,44 +59,35 @@ function App() {
 
 
   useEffect(() => {
-    // Check cookie on reload
-    if (localStorage.getItem('loggedIn')){
-      setLoggedIn(localStorage.getItem('loggedIn'))//set status to saved in local storage
+    //get user info if logged in
+    if (loggedIn) {
+      checkCookie();
+      api.getMovies().then((res)=>setSavedMovies(res.data)).catch(err => console.log(err))
+      console.log(savedMovies)
     }
-    checkCookie()
-  },[])
-
-  useEffect(() => {
-    if (!loggedIn) return;
-    // User info
-    api.getUserInfo()
-      .then((res) => {
-        setCurrentUser(res.data)
-      })
-      .catch(err => {
-        console.log(err);
-        history.push('/signin') 
-      });
   }, [loggedIn]);
 
   // FILTER MOVIES
-  useEffect(() => {
+
+  function moviesFilter(movieList){
     setFilteredMovies(
-      movies.data
-      .filter((movie) => {
-        if (movie.nameEN) {
-          return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
-        }
-        return false
-      })
-      .filter((movie) => {
-        if (movie.duration >= 40 && searchTermOption){
+      movieList.filter((movie) => {
+          if (movie.nameEN) {
+            return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
+          }
           return false
-        }
-        return movie
-      })
+        })
+        .filter((movie) => {
+          if (movie.duration >= 40 && searchTermOption){
+            return false
+          }
+          return movie
+        })
     )
-  }, [movies.data, searchTermOption])
+  }
+  useEffect(() => {
+    moviesFilter(movies.data)
+  }, [movies.data])
 
 
   // LOGIN
@@ -109,10 +101,10 @@ function App() {
     api.getUserInfo().then((res) => {
       setLoggedIn(true)
       setCurrentUser(res.data)
-      localStorage.setItem('loggedIn', true)
+      return res
     })
     .catch(err => {
-      console.log(err); 
+      setLoggedIn(false) 
     });
   }
 
@@ -148,22 +140,22 @@ function App() {
     } else {
       console.log(card)
       const savedCard = {
-        country: card.country,
-        director: card.director,
-        duration: card.duration,
-        year: card.year,
-        description: card.description,
-        image: `https://api.nomoreparties.co/${card.image.url}`,
-        trailerLink: card.trailerLink,
-        thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
-        nameEN: card.nameEN,
-        nameRU: card.nameRU,
-        movieId: card.id
+        country: card.country || 'Imaginarium',
+        director: card.director || '',
+        duration: card.duration || 0,
+        year: card.year || '',
+        description: card.description || '',
+        image: `https://api.nomoreparties.co/${card.image.url}` || '',
+        trailerLink: card.trailerLink || '',
+        thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}` || '',
+        nameEN: card.nameEN || '',
+        nameRU: card.nameRU || '',
+        movieId: card.id || 0
       }
       api.saveCard(savedCard).then((newCard) => {
         //dispatchMovies({type: 'SAVE_MOVIE'})
         //TODO SAVE LOCAL STORAGE
-        console.log(newCard)
+        console.log('saved')
         setSavedMovies(savedMovies.concat(newCard.data))
       })
       .catch(err => console.log(err))
@@ -183,16 +175,33 @@ function App() {
     }
 
      api.deleteCard(cardId).then(() => {
-      console.log(savedMovies)
       setSavedMovies(savedMovies.filter(mov => mov._id !== cardId.toString()))
     })
     .catch(err => console.log(err))
+  }
+
+  function handleSavedSearch(moviesList) {
+    moviesFilter(moviesList)
   }
    
   return (
     <div className='app'>
       <CurrentUserContext.Provider value={currentUser}>
         <Switch>
+          <Route exact path='/'>
+            <Main />
+          </Route>  
+          <Route exact path='/signin'>
+            <Login 
+              handleLogin={handleLogin}
+              loggedIn={loggedIn}
+            />
+          </Route>
+          <Route exact path='/signup'>
+            <Register 
+              handleLogin={handleLogin}
+            />
+          </Route> 
           <ProtectedRoute 
             path='/movies'
             loggedIn={loggedIn}
@@ -206,6 +215,8 @@ function App() {
             path='/saved-movies'
             loggedIn={loggedIn}
             movies={savedMovies}
+            savedMovies={savedMovies}
+            onSearchSubmit={handleSavedSearch}
             onDeleteCard={handleDeleteCard}
             onLoad={dispatchMovies}
             component={SavedMovies}
@@ -216,18 +227,6 @@ function App() {
             component={Profile}
             onUpdateUser={handleUpdateUser}
           />
-          <Route exact path='/'>
-            <Main />
-          </Route>  
-          <Route path='/signin'>
-            <Login 
-              handleLogin={handleLogin}
-              loggedIn={loggedIn}
-            />
-          </Route>
-          <Route path='/signup'>
-            <Register handleLogin={handleLogin}/>
-          </Route> 
           <Route path='*'>
             <PageNotFound />
           </Route> 

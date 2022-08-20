@@ -26,6 +26,13 @@ function Login(props) {
     }, 3000);
     return () => clearTimeout(timer) 
   }, [message])
+
+  useEffect(() => {
+    console.log(props.loggedIn)
+    if (props.loggedIn) {
+      history.push('/movies')
+    }
+  })
   
   // HANDLE SUBMIT
   function handleSubmit(e) {
@@ -35,7 +42,6 @@ function Login(props) {
       .then((data) => {
         if (data) {
           props.handleLogin(e)
-          history.push('/movies')
         } else {
           setMessage('Error')
         }})

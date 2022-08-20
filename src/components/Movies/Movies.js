@@ -4,8 +4,10 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import Preloader from '../Preloader/Preloader';
+import { useEffect } from 'react';
 
 function Movies(props) {
+
   return (
     <>
       <NavigationAuth />
