@@ -9,18 +9,19 @@ import { useState } from 'react';
 
 
 function SavedMovies(props) {
-  const [movies, setMovies] = useState([])
 
+  // useEffect(() => {
+  //   console.log(props)
+  //   props.setFilteredMovies(props.savedMovies)//update saved cards on page load
+  //  },[])
+
+  // FILTER MOVIES
   useEffect(() => {
-     setMovies(props.savedMovies)//update saved cards on page load
-   },[])
-
-   useEffect(() => {
-
-   }, [props.searchText])
+    console.log(props)
+    props.moviesFilter(props.savedMovies)
+  },[props.searchOptions, props.savedMovies])
   
   function handleSubmit(text,option) {
-    setMovies(props.movies)
     props.onSearchSubmit(text,option)
   }
   
@@ -42,7 +43,7 @@ function SavedMovies(props) {
         <Preloader />
       ) : (
         <MoviesCardList 
-          list={movies || []} 
+          list={props.movies} 
           onClick={props.onDeleteCard} 
           icon={` movies-card__save-button_delete`}
           {...props}

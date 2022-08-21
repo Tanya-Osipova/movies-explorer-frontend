@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
@@ -6,6 +6,14 @@ import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
+  useEffect(() => {
+    props.moviesFilter(props.movies.data)
+  },[])
+
+    // FILTER MOVIES
+  useEffect(() => {
+    props.moviesFilter(props.movies.data)
+  },[props.searchOptions])
 
   return (
     <>

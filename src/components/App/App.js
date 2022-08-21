@@ -67,10 +67,7 @@ function App() {
     }
   }, [loggedIn]);
 
-  // FILTER MOVIES
-  useEffect(() => {
-    moviesFilter(movies.data)
-  },[searchTermOption])
+
 
   function moviesFilter(movieList){
     setFilteredMovies(
@@ -217,6 +214,7 @@ function App() {
             setSearchOption={setSearchTermOption}
             movies={movies}
             list={filteredMovies}
+            moviesFilter={moviesFilter}
             onSearchSubmit={handleSearch}
             onSaveCard={handleSaveCard}
             component={Movies}
@@ -230,6 +228,8 @@ function App() {
             setSearchOption={setSearchTermOption}
             movies={filteredMovies}
             savedMovies={savedMovies}
+            setFilteredMovies={setFilteredMovies}
+            moviesFilter={moviesFilter}
             onSearchSubmit={handleSavedSearch}
             onDeleteCard={handleDeleteCard}
             component={SavedMovies}
