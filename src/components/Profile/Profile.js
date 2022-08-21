@@ -5,8 +5,8 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { api } from '../../utils/MainApi';
 import Popup from '../Popup/Popup';
 import ProfileUpdate from '../ProfileUpdate/ProfileUpdate';
-import './Profile.css';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState';
+import './Profile.css';
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);

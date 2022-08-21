@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, { useEffect } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
@@ -36,6 +36,7 @@ function Movies(props) {
           list={props.list} 
           onClick={props.onSaveCard} 
           icon={` movies-card__save-button_active`}
+          searchText={props.searchText}
         />
       )}
       <Footer />

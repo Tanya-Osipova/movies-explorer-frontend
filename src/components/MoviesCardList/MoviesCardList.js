@@ -27,7 +27,7 @@ const MoviesCardList = ({ list, onClick, ...props }) => {
     }
   };
 
-  if (!list.length) {
+  if (!list.length && props.searchText) {
     return (
       <p className="message-info">
         No movies matched your search criteria

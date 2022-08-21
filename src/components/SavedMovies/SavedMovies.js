@@ -1,23 +1,14 @@
 import React from 'react';
+import { useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
-import { useEffect } from 'react';
-import { useState } from 'react';
-
 
 function SavedMovies(props) {
-
-  // useEffect(() => {
-  //   console.log(props)
-  //   props.setFilteredMovies(props.savedMovies)//update saved cards on page load
-  //  },[])
-
   // FILTER MOVIES
   useEffect(() => {
-    console.log(props)
     props.moviesFilter(props.savedMovies)
   },[props.searchOptions, props.savedMovies])
   

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Main from '../Main/Main';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
@@ -16,15 +16,12 @@ import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
 import './App.css';
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
-  const history = useHistory();
+  const [currentUser, setCurrentUser] = useSemiPersistentState('user','');
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
   const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
   const [filteredMovies,setFilteredMovies] = useState([])
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
   const [loggedIn, setLoggedIn] = useSemiPersistentState('loggedIn',false);
-
-
 
   const moviesReducer = (state, action) => {
     switch (action.type) {
@@ -57,18 +54,15 @@ function App() {
     { data: [], isLoading: false, isError: false }
   );
 
-
   useEffect(() => {
     //get user info if logged in
     if (loggedIn) {
       checkCookie();
       api.getMovies().then((res)=>setSavedMovies(res.data)).catch(err => console.log(err))
-      console.log(savedMovies)
     }
   }, [loggedIn]);
 
-
-
+  // FILTER
   function moviesFilter(movieList){
     setFilteredMovies(
       movieList.filter((movie) => {
@@ -85,6 +79,7 @@ function App() {
          })
     )
   }
+
   //filter movies once search term is updated
   useEffect(() => {
     moviesFilter(movies.data)
@@ -154,9 +149,6 @@ function App() {
         movieId: card.id || 0
       }
       api.saveCard(savedCard).then((newCard) => {
-        //dispatchMovies({type: 'SAVE_MOVIE'})
-        //TODO SAVE LOCAL STORAGE
-        console.log('saved')
         setSavedMovies(savedMovies.concat(newCard.data))
       })
       .catch(err => console.log(err))
@@ -164,7 +156,6 @@ function App() {
   }
 
   function handleDeleteCard(card) {
-
     let cardId;
     //Movies page
     if (card.id) {
@@ -175,7 +166,7 @@ function App() {
       cardId = card._id
     }
 
-     api.deleteCard(cardId).then(() => {
+      api.deleteCard(cardId).then(() => {
       setSavedMovies(savedMovies.filter(mov => mov._id !== cardId.toString()))
     })
     .catch(err => console.log(err))
@@ -228,7 +219,7 @@ function App() {
             setSearchOption={setSearchTermOption}
             movies={filteredMovies}
             savedMovies={savedMovies}
-            setFilteredMovies={setFilteredMovies}
+            setFilterMovies={setFilteredMovies}
             moviesFilter={moviesFilter}
             onSearchSubmit={handleSavedSearch}
             onDeleteCard={handleDeleteCard}

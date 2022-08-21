@@ -3,11 +3,10 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import useInput from '../../hooks/useInput';
 import './SearchForm.css';
 
-function SearchForm({ onSearchSubmit,...props }) {
+function SearchForm({ onSearchSubmit, ...props }) {
   const name = useInput('', {isEmpty: true})
   
   const handleFilterChange = () => {
-    console.log(props)
     props.setSearchOption(!props.searchOptions);
   };
 
@@ -22,7 +21,6 @@ function SearchForm({ onSearchSubmit,...props }) {
     if (name.inputValid) {
       onSearchSubmit(props.searchText, props.searchOptions)
     } 
-    //name.isError = true
   }
 
   return (
@@ -36,8 +34,6 @@ function SearchForm({ onSearchSubmit,...props }) {
         value={props.searchText}
         onChange={handleSearchInput}
       />
-      {(name.isError && name.isEmpty) && <p className='form__error-message'>Search keyword is required!</p>}
-
       <button 
         className="search-form__button" 
         type="submit" 
@@ -48,6 +44,7 @@ function SearchForm({ onSearchSubmit,...props }) {
         value={props.searchOptions}
         onChange={handleFilterChange}
       />
+      {(name.isError && name.isEmpty) && <p className='form__error-message'>Search keyword is required!</p>}
     </form>
   );
 }
