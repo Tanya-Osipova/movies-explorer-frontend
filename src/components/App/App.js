@@ -68,6 +68,9 @@ function App() {
   }, [loggedIn]);
 
   // FILTER MOVIES
+  useEffect(() => {
+    moviesFilter(movies.data)
+  },[searchTermOption])
 
   function moviesFilter(movieList){
     setFilteredMovies(
@@ -77,14 +80,15 @@ function App() {
           }
           return false
         })
-        .filter((movie) => {
-          if (movie.duration >= 40 && searchTermOption){
-            return false
-          }
-          return movie
-        })
+         .filter((movie) => {
+           if (movie.duration >= 40 && searchTermOption){
+             return false
+           }
+           return movie
+         })
     )
   }
+  //filter movies once search term is updated
   useEffect(() => {
     moviesFilter(movies.data)
   }, [movies.data])
@@ -180,8 +184,10 @@ function App() {
     .catch(err => console.log(err))
   }
 
-  function handleSavedSearch(moviesList) {
-    moviesFilter(moviesList)
+  function handleSavedSearch(text,option) {
+    setSearchTerm(text)
+    setSearchTermOption(option)
+    moviesFilter(savedMovies)
   }
    
   return (
@@ -205,6 +211,10 @@ function App() {
           <ProtectedRoute 
             path='/movies'
             loggedIn={loggedIn}
+            searchText={searchTerm}
+            setSearchText={setSearchTerm}
+            searchOptions={searchTermOption}
+            setSearchOption={setSearchTermOption}
             movies={movies}
             list={filteredMovies}
             onSearchSubmit={handleSearch}
@@ -214,11 +224,14 @@ function App() {
           <ProtectedRoute 
             path='/saved-movies'
             loggedIn={loggedIn}
-            movies={savedMovies}
+            searchText={searchTerm}
+            setSearchText={setSearchTerm}
+            searchOptions={searchTermOption}
+            setSearchOption={setSearchTermOption}
+            movies={filteredMovies}
             savedMovies={savedMovies}
             onSearchSubmit={handleSavedSearch}
             onDeleteCard={handleDeleteCard}
-            onLoad={dispatchMovies}
             component={SavedMovies}
           />
           <ProtectedRoute 

@@ -5,19 +5,31 @@ import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import { useEffect } from 'react';
+import { useState } from 'react';
 
 
 function SavedMovies(props) {
-  // useEffect(() => {
-  //   props.onSearchSubmit(props.SavedMovies)//update filtered cards on page load
-  // },[])
+  const [movies, setMovies] = useState([])
 
+  useEffect(() => {
+     setMovies(props.savedMovies)//update saved cards on page load
+   },[])
+
+   useEffect(() => {
+
+   }, [props.searchText])
+  
+  function handleSubmit(text,option) {
+    setMovies(props.movies)
+    props.onSearchSubmit(text,option)
+  }
   
   return (
     <>
       <NavigationAuth />
       <SearchForm 
-        onSearchSubmit={props.onSearchSubmit}
+        onSearchSubmit={handleSubmit}
+        {...props}
       />
 
       {props.movies.isError && 
@@ -30,9 +42,10 @@ function SavedMovies(props) {
         <Preloader />
       ) : (
         <MoviesCardList 
-          list={props.movies || []} 
+          list={movies || []} 
           onClick={props.onDeleteCard} 
           icon={` movies-card__save-button_delete`}
+          {...props}
         />
       )}
       <Footer />
