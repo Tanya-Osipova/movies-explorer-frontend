@@ -16,7 +16,7 @@ export default class Api {
     })
     .catch((err) => console.log('error'))
   }
-  
+
   // Get User Info
   getUserInfo() {
     const promise = fetch(`${this._url}/users/me`, {
@@ -87,7 +87,7 @@ export default class Api {
 
 // Api
 export const api = new Api({
-  url: 'http://localhost:3001/api',
+  url: 'https://exploremovies.nomoredomains.xyz/api',
   headers: {
     'Content-Type': 'application/json'
   },

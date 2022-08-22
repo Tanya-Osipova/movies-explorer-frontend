@@ -9,12 +9,12 @@ import useSemiPersistentState from '../../hooks/useSemiPersistentState';
 import './Profile.css';
 
 function Profile(props) {
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
+  const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
+  
   const currentUser = React.useContext(CurrentUserContext);
   const [popupActive, setPopupActive] = useState(false);
   const history = useHistory();
-  const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[])
-  const [loggedIn,setLoggedIn] = useSemiPersistentState('loggedIn', false)
-  
   // POPUP
   useEffect(() => {
     document.addEventListener("keydown", handleEscapeKey);
@@ -25,8 +25,8 @@ function Profile(props) {
 
   //Redirect to home page if logged out
   useEffect(() => {
-    if (!loggedIn) history.push('/')
-  },[loggedIn])
+    if (!props.loggedIn) history.push('/')
+  },[props.loggedIn])
 
   function handleEscapeKey(e) {
     if(e.key === 'Escape') {
@@ -37,10 +37,14 @@ function Profile(props) {
   // SIGNOUT
   function signOut() {
     api.signOut().then(() => {
-      setLoggedIn(false)
+      props.setLoggedIn(false)
+      props.setCurrentUser({})
+      props.setSavedMovies([])
+      setSearchTerm('')
+      setSearchTermOption(false)
     })
     .catch(err => console.log(err))
-    setSavedMovies([])
+    
   }
   
   return (

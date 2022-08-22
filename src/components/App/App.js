@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch,useHistory } from 'react-router-dom';
 import Main from '../Main/Main';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
@@ -11,6 +11,7 @@ import '../../vendor/fonts/fonts.css';
 import ProtectedRoute from "../ProtectedRoute";
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import { api } from '../../utils/MainApi';
+import * as userAuth from '../../utils/userAuth.js';
 import { moviesApi } from '../../utils/MoviesApi';
 import useSemiPersistentState from '../../hooks/useSemiPersistentState.js';
 import './App.css';
@@ -22,6 +23,8 @@ function App() {
   const [filteredMovies,setFilteredMovies] = useState([])
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
   const [loggedIn, setLoggedIn] = useSemiPersistentState('loggedIn',false);
+  const history = useHistory();
+
 
   const moviesReducer = (state, action) => {
     switch (action.type) {
@@ -56,9 +59,11 @@ function App() {
 
   useEffect(() => {
     //get user info if logged in
-    if (loggedIn) {
+    if (loggedIn === true) {
       checkCookie();
       api.getMovies().then((res)=>setSavedMovies(res.data)).catch(err => console.log(err))
+    } else {
+      history.push('/')
     }
   }, [loggedIn]);
 
@@ -87,9 +92,17 @@ function App() {
 
 
   // LOGIN
-  function handleLogin(e) {
+  function handleLogin(e,email,password) {
     e.preventDefault();
-    checkCookie();
+    userAuth.authorize(email, password)
+      .then((data) => {
+        if (data) {
+          checkCookie()
+          return 'Success'
+        } else {
+          return 'Error'
+        }})
+        .catch(err => 'Error')
   }
 
   // GET USER INFO
@@ -134,7 +147,6 @@ function App() {
       //DELETE saved card
       handleDeleteCard(card)
     } else {
-      console.log(card)
       const savedCard = {
         country: card.country || 'Imaginarium',
         director: card.director || '',
@@ -194,6 +206,7 @@ function App() {
           <Route exact path='/signup'>
             <Register 
               handleLogin={handleLogin}
+              setCurrentUser={setCurrentUser}
             />
           </Route> 
           <ProtectedRoute 
@@ -228,6 +241,9 @@ function App() {
           <ProtectedRoute 
             path='/profile'
             loggedIn={loggedIn}
+            setCurrentUser={setCurrentUser}
+            setLoggedIn={setLoggedIn}
+            setSavedMovies={setSavedMovies}
             component={Profile}
             onUpdateUser={handleUpdateUser}
           />

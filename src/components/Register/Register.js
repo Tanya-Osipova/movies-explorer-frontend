@@ -21,6 +21,12 @@ function Register(props) {
   const history = useHistory();
 
   useEffect(() => {
+    if (props.loggedIn) {
+      history.push('/movies')
+    }
+  })
+
+  useEffect(() => {
     if (!message) return
     setPopupActive(true)
     const timer = setTimeout(() => {
@@ -37,10 +43,10 @@ function Register(props) {
       userAuth.register(name.value, email.value, password.value)
         .then((data) => {
           if (data) {
-            currentUser.name = data.name
-            currentUser.email = data.email
+            props.setCurrentUser(data)
             setMessage('Success')
-            setTimeout(() => history.push('/movies'),3000);
+            props.handleLogin(e, email.value, password.value);
+            setTimeout(() => history.push('/signin'),2000);
           } else {
             setMessage('Error')
           }})

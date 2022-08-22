@@ -28,24 +28,15 @@ function Login(props) {
   }, [message])
 
   useEffect(() => {
-    console.log(props.loggedIn)
     if (props.loggedIn) {
       history.push('/movies')
     }
-  })
+  }, [props.loggedIn])
   
   // HANDLE SUBMIT
   function handleSubmit(e) {
     e.preventDefault()
-   
-    userAuth.authorize(email.value, password.value)
-      .then((data) => {
-        if (data) {
-          props.handleLogin(e)
-        } else {
-          setMessage('Error')
-        }})
-        .catch(err => setMessage(err.message))
+    setMessage(props.handleLogin(e, email.value, password.value))
   } 
 
   return (

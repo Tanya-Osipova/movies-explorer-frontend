@@ -10,6 +10,7 @@ function ProfileUpdate(props) {
   const name = useInput('', {isEmpty: true, minLength: 2, maxLength: 30})
   const [sameData,setSameData] = React.useState(true)
   const [message, setMessage] = React.useState('')
+  const [profileUpdated,setProfileUpdated] = React.useState(false)
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -27,6 +28,7 @@ function ProfileUpdate(props) {
   }, [props.active]);
 
   useEffect(() => {
+    if (!props.user.name) return
     setMessage(<p className='form__update-message'>Updated successfully!</p>)
     const timer = setTimeout(() => {
       props.setActive(false)
