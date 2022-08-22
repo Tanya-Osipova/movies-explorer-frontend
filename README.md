@@ -9,3 +9,7 @@
 [Movies explorer](https://exploremovies.nomoredomains.xyz/)
 
 IP 65.108.214.116
+
+## Pull request link
+
+https://github.com/Tanya-Osipova/movies-explorer-frontend/pull/2
