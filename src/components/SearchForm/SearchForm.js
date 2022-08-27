@@ -4,7 +4,7 @@ import useInput from '../../hooks/useInput';
 import './SearchForm.css';
 
 function SearchForm({ onSearchSubmit, ...props }) {
-  const name = useInput('', {isEmpty: true})
+  const name = useInput(props.searchText, {isEmpty: true})
   
   const handleFilterChange = () => {
     props.setSearchOption(!props.searchOptions);

@@ -18,7 +18,9 @@ function MoviesCard({ card, onClick, ...props }) {
     onClick(savedCard)
     setIsSaved(!isSaved)
   };
-
+  if (props.searchOptions && card.duration >= 40) {
+    return
+  } else {
   return (
     <li className="movies-card">
       <div className="movies-card__info">
@@ -46,6 +48,6 @@ function MoviesCard({ card, onClick, ...props }) {
       </Link>
     </li>
   );
-}
+}}
 
 export default MoviesCard;

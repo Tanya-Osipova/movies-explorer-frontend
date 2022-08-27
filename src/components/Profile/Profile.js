@@ -40,8 +40,14 @@ function Profile(props) {
       props.setLoggedIn(false)
       props.setCurrentUser({})
       props.setSavedMovies([])
+      props.setFoundMovies({data:[], 
+                            searchTerm:'',
+                            searchTermOption:false});
       setSearchTerm('')
       setSearchTermOption(false)
+      props.moviesUpdate({ type: 'MOVIES_FLUSH'})
+      props.setSearchTerm('')
+      props.setSearchOption(false)
     })
     .catch(err => console.log(err))
     

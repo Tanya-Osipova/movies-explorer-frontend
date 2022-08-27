@@ -43,7 +43,8 @@ const MoviesCardList = ({ list, onClick, ...props }) => {
             key={card.id || card.movieId} 
             card={card}
             icon={props.icon}
-            onClick={onClick} 
+            onClick={onClick}
+            searchOptions={props.searchOptions} 
           />
         ))}
       </ul>

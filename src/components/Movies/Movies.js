@@ -6,20 +6,30 @@ import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
-  useEffect(() => {
-    props.moviesFilter(props.movies.data)
-  },[])
 
-    // FILTER MOVIES
-  useEffect(() => {
-    props.moviesFilter(props.movies.data)
-  },[props.searchOptions])
+  const handleSearchOption = (option) => {
+        props.setFoundMovies({
+          ...props.list,
+          searchTermOption: option
+        })
+  }
+
+  const handleSearch = (text) => {
+        props.setFoundMovies({
+          ...props.list,
+          searchTerm: text
+        })
+  }
 
   return (
     <>
       <NavigationAuth />
       <SearchForm 
         onSearchSubmit={props.onSearchSubmit}
+        searchText={props.list.searchTerm}
+        searchOptions={props.list.searchTermOption}
+        setSearchOption={handleSearchOption}
+        setSearchText={handleSearch}
         {...props}
       />
 
@@ -33,10 +43,12 @@ function Movies(props) {
         <Preloader />
       ) : (
         <MoviesCardList 
-          list={props.list} 
+          list={props.list.data} 
           onClick={props.onSaveCard} 
           icon={` movies-card__save-button_active`}
-          searchText={props.searchText}
+          searchText={props.list.searchTerm}
+          searchOptions={props.searchOptions}
+
         />
       )}
       <Footer />

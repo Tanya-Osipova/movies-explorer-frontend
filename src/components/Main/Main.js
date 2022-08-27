@@ -7,10 +7,12 @@ import Promo from '../Promo/Promo';
 import Techs from '../Techs/Techs';
 import Footer from '../Footer/Footer';
 
-function Main() {
+function Main(props) {
   return (
     <>
-      <Header />
+      <Header 
+        {...props}
+      />
       
       <Promo />
       <AboutProject />

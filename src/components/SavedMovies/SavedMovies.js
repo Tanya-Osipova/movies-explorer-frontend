@@ -7,6 +7,11 @@ import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 
 function SavedMovies(props) {
+// on component mount
+useEffect(()=> {
+  props.setSearchText('')
+},[])
+
   // FILTER MOVIES
   useEffect(() => {
     props.moviesFilter(props.savedMovies)
@@ -37,8 +42,8 @@ function SavedMovies(props) {
           list={props.movies} 
           onClick={props.onDeleteCard} 
           icon={` movies-card__save-button_delete`}
-          {...props}
-        />
+          searchOptions={props.searchOptions}
+          />
       )}
       <Footer />
     </>

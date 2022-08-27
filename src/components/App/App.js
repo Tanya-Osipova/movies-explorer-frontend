@@ -20,6 +20,9 @@ function App() {
   const [currentUser, setCurrentUser] = useSemiPersistentState('user','');
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
   const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
+  const [foundMovies, setFoundMovies] = useSemiPersistentState('foundMovies',{data:[], 
+                                                                              searchTerm:'',
+                                                                              searchTermOption:false});
   const [filteredMovies,setFilteredMovies] = useState([])
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
   const [loggedIn, setLoggedIn] = useSemiPersistentState('loggedIn',false);
@@ -47,6 +50,13 @@ function App() {
           isLoading: false,
           isError: true,
         };
+      case 'MOVIES_FLUSH':
+        return {
+          ...state,
+          isLoading: false,
+          isError: false,
+          data: [],
+        };
       default:
         throw new Error();
     }
@@ -68,26 +78,28 @@ function App() {
   }, [loggedIn]);
 
   // FILTER
-  function moviesFilter(movieList){
+  function moviesFilter(movieList,text){
     setFilteredMovies(
       movieList.filter((movie) => {
           if (movie.nameEN) {
-            return movie.nameEN.toLowerCase().includes(searchTerm.toLowerCase())
+            if (movie.nameEN.toLowerCase().includes(text.toLowerCase())) {
+                return true
+            }
+            
           }
           return false
         })
-         .filter((movie) => {
-           if (movie.duration >= 40 && searchTermOption){
-             return false
-           }
-           return movie
-         })
     )
   }
 
   //filter movies once search term is updated
   useEffect(() => {
-    moviesFilter(movies.data)
+    if (!movies.data || !movies.data.length || !filteredMovies.searchTerm ) return
+    console.log(movies,filteredMovies)
+    moviesFilter(movies.data, filteredMovies.searchTerm)
+    setFoundMovies({data:filteredMovies,
+                    searchTerm: searchTerm,
+                    searchTermOption:searchTermOption})
   }, [movies.data])
 
 
@@ -127,19 +139,30 @@ function App() {
 
   // SEARCH
   function handleSearch(text, option) {
-    dispatchMovies({ type: 'MOVIES_FETCH_INIT'})
-    moviesApi.getMovies()
-      .then((result) => {
-        setSearchTerm(text);
-        setSearchTermOption(option);
-        dispatchMovies({
-          type: 'MOVIES_FETCH_SUCCESS',
-          payload: result,
-        });
-      })
-      .catch(() =>
-        dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
-      );
+    if (movies.data.length === 0){ 
+      dispatchMovies({ type: 'MOVIES_FETCH_INIT'})
+      moviesApi.getMovies()
+        .then((result) => {
+          console.log(result)
+          dispatchMovies({
+            type: 'MOVIES_FETCH_SUCCESS',
+            payload: result,
+          });
+          moviesFilter(result,text)
+          setFoundMovies({data:filteredMovies,
+                      searchTerm: text,
+                      searchTermOption:option})
+          console.log(filteredMovies,text)
+        })
+        .catch(() =>
+          dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
+        );
+    } else {
+        moviesFilter(movies.data,text)
+        setFoundMovies({data:filteredMovies,
+                    searchTerm: text,
+                    searchTermOption:option})
+    }
   }
 
   function handleSaveCard(card) {
@@ -187,7 +210,7 @@ function App() {
   function handleSavedSearch(text,option) {
     setSearchTerm(text)
     setSearchTermOption(option)
-    moviesFilter(savedMovies)
+    moviesFilter(savedMovies,text)
   }
    
   return (
@@ -195,7 +218,9 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Switch>
           <Route exact path='/'>
-            <Main />
+            <Main 
+              loggedIn={loggedIn}
+            />
           </Route>  
           <Route exact path='/signin'>
             <Login 
@@ -212,13 +237,9 @@ function App() {
           <ProtectedRoute 
             path='/movies'
             loggedIn={loggedIn}
-            searchText={searchTerm}
-            setSearchText={setSearchTerm}
-            searchOptions={searchTermOption}
-            setSearchOption={setSearchTermOption}
+            setFoundMovies={setFoundMovies}
             movies={movies}
-            list={filteredMovies}
-            moviesFilter={moviesFilter}
+            list={foundMovies}
             onSearchSubmit={handleSearch}
             onSaveCard={handleSaveCard}
             component={Movies}
@@ -244,8 +265,12 @@ function App() {
             setCurrentUser={setCurrentUser}
             setLoggedIn={setLoggedIn}
             setSavedMovies={setSavedMovies}
+            setFoundMovies={setFoundMovies}
+            setSearchTerm={setSearchTerm}
+            setSearchOption={setSearchTermOption}
             component={Profile}
             onUpdateUser={handleUpdateUser}
+            moviesUpdate={dispatchMovies}
           />
           <Route path='*'>
             <PageNotFound />
