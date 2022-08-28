@@ -12,9 +12,10 @@ useEffect(()=> {
   props.setSearchText('')
 },[])
 
-  // FILTER MOVIES
+  // FILTER MOVIES or return saved movies on load
   useEffect(() => {
-    props.moviesFilter(props.savedMovies)
+    props.setFilteredMovies(props.moviesFilter(props.savedMovies, props.searchText))
+
   },[props.searchOptions, props.savedMovies])
   
   function handleSubmit(text,option) {
@@ -43,6 +44,7 @@ useEffect(()=> {
           onClick={props.onDeleteCard} 
           icon={` movies-card__save-button_delete`}
           searchOptions={props.searchOptions}
+          allMovies={props.savedMovies}
           />
       )}
       <Footer />

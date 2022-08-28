@@ -1,5 +1,5 @@
-//export const BASE_URL = 'https://exploremovies.nomoredomains.xyz/api';
-export const BASE_URL = 'http://localhost:3001/api';
+export const BASE_URL = 'https://exploremovies.nomoredomains.xyz/api';
+//export const BASE_URL = 'http://localhost:3001/api';
 
 export const register = (username, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -27,7 +27,6 @@ export const register = (username, email, password) => {
   .then((res) => {
     return res;
   })
-  .catch((err) => console.log(err));
 };
 
 // LOGIN
@@ -57,7 +56,6 @@ export const authorize = (email, password) => {
   .then((res) => {
     return res;
   })
-  .catch((err) => console.log(err));
 }; 
 
 // CHECK TOKEN

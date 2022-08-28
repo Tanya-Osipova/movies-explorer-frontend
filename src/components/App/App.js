@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { Route, Switch,useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Main from '../Main/Main';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Login from '../Login/Login';
@@ -20,14 +20,10 @@ function App() {
   const [currentUser, setCurrentUser] = useSemiPersistentState('user','');
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search','');
   const [searchTermOption, setSearchTermOption] = useSemiPersistentState('searchOption',false);
-  const [foundMovies, setFoundMovies] = useSemiPersistentState('foundMovies',{data:[], 
-                                                                              searchTerm:'',
-                                                                              searchTermOption:false});
+  const [foundMovies, setFoundMovies] = useSemiPersistentState('foundMovies',{data:[], searchTerm: '', searchTermOption:false});
   const [filteredMovies,setFilteredMovies] = useState([])
   const [savedMovies, setSavedMovies] = useSemiPersistentState('savedMovies',[]);
   const [loggedIn, setLoggedIn] = useSemiPersistentState('loggedIn',false);
-  const history = useHistory();
-
 
   const moviesReducer = (state, action) => {
     switch (action.type) {
@@ -72,34 +68,29 @@ function App() {
     if (loggedIn === true) {
       checkCookie();
       api.getMovies().then((res)=>setSavedMovies(res.data)).catch(err => console.log(err))
-    } else {
-      history.push('/')
     }
   }, [loggedIn]);
 
   // FILTER
-  function moviesFilter(movieList,text){
-    setFilteredMovies(
-      movieList.filter((movie) => {
-          if (movie.nameEN) {
-            if (movie.nameEN.toLowerCase().includes(text.toLowerCase())) {
-                return true
-            }
-            
+  function moviesFilter(movieList,text) { 
+    return movieList.filter((movie) => {
+        if (movie.nameEN) {
+          if (movie.nameEN.toLowerCase().includes(text.toLowerCase())) {
+            return true
           }
-          return false
-        })
-    )
+        }
+        return false
+      })
   }
 
   //filter movies once search term is updated
   useEffect(() => {
-    if (!movies.data || !movies.data.length || !filteredMovies.searchTerm ) return
-    console.log(movies,filteredMovies)
-    moviesFilter(movies.data, filteredMovies.searchTerm)
-    setFoundMovies({data:filteredMovies,
-                    searchTerm: searchTerm,
-                    searchTermOption:searchTermOption})
+    if (!movies.data || !movies.data.length ) return
+  
+    setFoundMovies({
+      data:moviesFilter(movies.data, foundMovies.searchTerm), 
+      searchTerm: foundMovies.searchTerm, 
+      searchTermOption:searchTermOption})
   }, [movies.data])
 
 
@@ -143,25 +134,25 @@ function App() {
       dispatchMovies({ type: 'MOVIES_FETCH_INIT'})
       moviesApi.getMovies()
         .then((result) => {
-          console.log(result)
           dispatchMovies({
             type: 'MOVIES_FETCH_SUCCESS',
             payload: result,
           });
-          moviesFilter(result,text)
-          setFoundMovies({data:filteredMovies,
-                      searchTerm: text,
-                      searchTermOption:option})
-          console.log(filteredMovies,text)
+          setFoundMovies({
+            data:moviesFilter(movies.data,text), 
+            searchTerm: text, 
+            searchTermOption:option
+          })
         })
         .catch(() =>
           dispatchMovies({ type: 'MOVIES_FETCH_FAILURE' })
         );
     } else {
-        moviesFilter(movies.data,text)
-        setFoundMovies({data:filteredMovies,
-                    searchTerm: text,
-                    searchTermOption:option})
+        setFoundMovies({
+          data:moviesFilter(movies.data,text), 
+          searchTerm: text, 
+          searchTermOption:option
+        })
     }
   }
 
@@ -210,7 +201,7 @@ function App() {
   function handleSavedSearch(text,option) {
     setSearchTerm(text)
     setSearchTermOption(option)
-    moviesFilter(savedMovies,text)
+    setFilteredMovies(moviesFilter(savedMovies,text))
   }
    
   return (
@@ -253,7 +244,7 @@ function App() {
             setSearchOption={setSearchTermOption}
             movies={filteredMovies}
             savedMovies={savedMovies}
-            setFilterMovies={setFilteredMovies}
+            setFilteredMovies={setFilteredMovies}
             moviesFilter={moviesFilter}
             onSearchSubmit={handleSavedSearch}
             onDeleteCard={handleDeleteCard}

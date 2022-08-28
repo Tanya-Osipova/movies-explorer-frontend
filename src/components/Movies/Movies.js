@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
@@ -8,17 +8,17 @@ import Preloader from '../Preloader/Preloader';
 function Movies(props) {
 
   const handleSearchOption = (option) => {
-        props.setFoundMovies({
-          ...props.list,
-          searchTermOption: option
-        })
+    props.setFoundMovies({
+      ...props.list,
+      searchTermOption: option
+    })
   }
 
   const handleSearch = (text) => {
-        props.setFoundMovies({
-          ...props.list,
-          searchTerm: text
-        })
+    props.setFoundMovies({
+      ...props.list,
+      searchTerm: text
+    })
   }
 
   return (
@@ -47,7 +47,8 @@ function Movies(props) {
           onClick={props.onSaveCard} 
           icon={` movies-card__save-button_active`}
           searchText={props.list.searchTerm}
-          searchOptions={props.searchOptions}
+          searchOptions={props.list.searchTermOption}
+          allMovies={props.movies}
 
         />
       )}

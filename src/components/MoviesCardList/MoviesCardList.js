@@ -6,28 +6,35 @@ import './MoviesCardList.css'
 const MoviesCardList = ({ list, onClick, ...props }) => {
   const screenWidth = window.innerWidth;
   const [more, setMore] = useState(0);
+  const desktopResolution = 1280;
+  const tabletResolution = 600;
+  const initialDesktopCards = 12;
+  const initialTabletCards = 8;
+  const initialMobileCards = 5;
+  const moreCardsDesktop = 3;
+  const moreCardsTabletMobile = 2;
   
   useEffect(() => {
-    if (screenWidth >= 1280) {
-      setMore(12);
+    if (screenWidth >= desktopResolution) {
+      setMore(initialDesktopCards);
     } 
-    if (screenWidth < 1280 && screenWidth >= 768) {
-      setMore(8);
+    if (screenWidth < desktopResolution && screenWidth >= tabletResolution) {
+      setMore(initialTabletCards);
     } 
-    if (screenWidth < 768) {
-      setMore(5);
+    if (screenWidth < tabletResolution) {
+      setMore(initialMobileCards);
     }
   },[])
 
   const handleMore = () => {
-    if (screenWidth >= 1280) {
-      setMore((prevValue) => prevValue + 3);
+    if (screenWidth >= desktopResolution) {
+      setMore((prevValue) => prevValue + moreCardsDesktop);
     } else {
-      setMore((prevValue) => prevValue + 2);
+      setMore((prevValue) => prevValue + moreCardsTabletMobile);
     }
   };
 
-  if (!list.length && props.searchText) {
+  if (!list.length && props.searchText && (props.allMovies.length > 0)) {
     return (
       <p className="message-info">
         No movies matched your search criteria

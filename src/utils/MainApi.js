@@ -14,7 +14,6 @@ export default class Api {
     }).then((obj) => {
       return obj;
     })
-    .catch((err) => console.log('error'))
   }
 
   // Get User Info
@@ -87,8 +86,8 @@ export default class Api {
 
 // Api
 export const api = new Api({
-  // url: 'https://exploremovies.nomoredomains.xyz/api',
-  url: 'http://localhost:3001/api',
+  url: 'https://exploremovies.nomoredomains.xyz/api',
+  //url: 'http://localhost:3001/api',
   headers: {
     'Content-Type': 'application/json'
   },
