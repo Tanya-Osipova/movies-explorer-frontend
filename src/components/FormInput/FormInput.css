@@ -34,9 +34,10 @@
 
 .form__input:focus {
   border-bottom: 1px solid #2BE080;
-}
+} 
 /* ERROR */
-.form__error {
+
+.form__error-message {
   width: 100%;
   font-family: "Inter", 'Arial',
     'Helvetica',
@@ -48,3 +49,17 @@
   color: #EE3465;
   margin-top: 6px;
 }  
+
+.form__update-message {
+  width: 100%;
+  font-family: "Inter", 'Arial',
+    'Helvetica',
+    sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 12px;
+  color: #2BE080;
+  text-align: center;
+  margin-top: 10px;
+}

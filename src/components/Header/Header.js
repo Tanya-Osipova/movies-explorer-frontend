@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../Navigation/Navigation';
+import NavigationAuth from '../NavigationAuth/NavigationAuth';
 import './Header.css';
 
-function Header() {
+function Header(props) {
   const [fixedHeader, setFixedHeader] = useState(false);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ function Header() {
 
   return (
     <header className={fixedHeader ? 'header header_active' : 'header'}>
-      <Navigation />
+      {props.loggedIn ? <NavigationAuth/> : <Navigation/>}
     </header>
   );
 }
